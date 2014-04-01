@@ -1,0 +1,16 @@
+{
+  "name": "qNodeSkeleton",
+  "version": "0.0.0",
+  "description": "log into stuff",
+  "main": "skeleton.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "3.4.8",
+    "ejs": "*",
+    "passport": "~0.2.0"
+  }
+}

@@ -1,0 +1,89 @@
+<%
+var string='Hooray!';
+%>
+<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
+<html>
+<head>
+	<META HTTP-EQUIV='Content-Type' CONTENT='text/html; charset=UTF-8'>
+	
+
+    <title><%= title %></title>
+	
+	<script type='text/javascript' src='/socket.io/socket.io.js'></script>
+	<script type='text/javascript' src='http://code.jquery.com/jquery-2.0.3.min.js'></script>
+	<!--link rel='stylesheet' type='text/css' href='css/main.css' /-->
+	
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+	<style type='text/css'><!--
+	
+		body {color:orange;}
+		
+	--></style>
+	
+</head>
+<body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %> <%=string%>!!</p>
+    <div style='margin-top:20px;'>
+    	<a href='/'>index</a>
+    	<a href='/users'>users</a>
+    </div>
+    
+    <div style='width:500px;padding:50px;border:1pt solid #6a6;'>
+    	<input type='text' name='testString' id='testStringId'><br/>
+    	<input type='submit' id='submitButton'>
+    </div>
+    
+    <div id='messages'></div>
+	
+</body>
+
+<script type='text/javascript'>
+	/* <![CDATA[ */
+	
+var counter=0;	
+    $(document).ready(function() {
+    
+    	var socket = io.connect('/', {
+    		'force new connection': true
+    	});
+    	
+    	socket.on('connect', function () {
+    	counter++; $('#messages').prepend(counter+' got connection, emitting<br/>');
+    socket.$emit('testStringSubmit', {});
+  });
+  
+      	socket.on('connecting', function () {counter++; $('#messages').prepend(counter+' connecting<br/>');});
+      	socket.on('connect_failed', function () {counter++; $('#messages').prepend(counter+' connect_failed<br/>');});
+      	socket.on('connect', function () {counter++; $('#messages').prepend(counter+' connect<br/>');});
+    	
+//     	var socket = io.connect('/', {
+//     		'force new connection': true
+//     	});
+
+    	var submitFunction = function(event) {
+    			event.preventDefault();
+    			var testString = $('#testStringId').val();
+    			counter++; $('#messages').prepend(counter+' sending browser event<br/>');
+    			
+    			socket.emit('testStringSubmit', {
+    				testString: testString
+    			});
+    		}
+    		
+    	$('#submitButton').on('click', submitFunction);
+    	
+    	socket.on('serverEvent', function() {
+    		counter++; $('#messages').prepend(counter+' got serverEvent<br/>');
+    	});
+    	
+    	
+    	
+    });
+    
+    
+    
+	/* ]]> */
+</script>
+
+</html>

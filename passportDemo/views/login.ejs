@@ -1,0 +1,42 @@
+<?/*php require_once($_SERVER['DOCUMENT_ROOT'].'/tools/mailNotificationInclude.php');*/?>
+<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
+<html>
+<head>
+	<META HTTP-EQUIV='Content-Type' CONTENT='text/html; charset=UTF-8'>
+	
+	<script type='text/javascript' src='http://code.jquery.com/jquery-1.6.1.min.js'></script>
+	<!--link rel='stylesheet' type='text/css' href='css/main.css' /-->
+	
+	<style type='text/css'><!--
+	
+		body {color:#d86;font-size:150%;padding:100px;font-family:sans-serif;}
+		
+	--></style>
+	
+</head>
+<body>
+
+	Login Page
+	
+	<form method='POST' action='/login'>
+	<input type='text' name='username' value='USERX'>
+	<input type='text' name='password' value='PASSX'>
+	<input type='submit'>
+	</form>
+	
+</body>
+
+<script type='text/javascript'>
+	/* <![CDATA[ */
+	$(document).ready(function(){
+	
+		var now=Date.now().toString().substr(9, 4);
+	
+		$('body').append("<p>Login Page! Now do something cool. ("+now+")");
+	
+	
+	});
+	/* ]]> */
+</script>
+
+</html>
