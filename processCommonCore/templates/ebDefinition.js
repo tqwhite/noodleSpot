@@ -59,7 +59,7 @@ module.exports={
 			"maps":{
 					"expressbook":{
 						"LocalId":"LocalId",	
-						"SchoolInfoLocalId":"SchoolInfoLocalId"
+						"SchoolInfoLocalId":"SchoolInfo.LocalId"
 					}
 				},
 			"translation":{
@@ -113,7 +113,7 @@ module.exports={
 			"maps":{
 					"expressbook":{
 						"LocalId":"LocalId",
-						"SchoolInfoLocalId":"SchoolInfoLocalId"
+						"SchoolInfoLocalId":"SchoolInfo.LocalId"
 					}
 				},
 			"translation":{
@@ -149,7 +149,7 @@ module.exports={
 					"expressbook":{
 					"LeaInfoLocalId":"LeaInfo.LocalId",
 					"LocalId":"LocalId",
-					"CurrentTermLocalId":explodeCompoundRefId //just to remind me that this can be done
+					"CurrentTermLocalId":"CurrentTerm.LocalId"
 					}
 				}
 		},

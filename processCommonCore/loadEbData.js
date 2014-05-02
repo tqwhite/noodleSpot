@@ -11,7 +11,7 @@ node loadEbData.js --teacher --forReal -- dataFiles/uff/teacher.uff
 EB SEQUENCE
 node loadEbData.js --school --forReal -- dataFiles/eb/schoolSetup/school.eb
 node loadEbData.js --gradeLevel --forReal dataFiles/eb/schoolSetup/gradeLevel.eb
-node loadEbData.js --gradeLevelSchool --forReal dataFiles/schoolSetup/eb/gradeLevelSchool.eb
+node loadEbData.js --gradeLevelSchool --forReal dataFiles/eb/schoolSetup/gradeLevelSchool.eb
 node loadEbData.js --term --forReal -- dataFiles/eb/schoolSetup/term.eb
 node loadEbData.js --termSchool --forReal -- dataFiles/eb/schoolSetup/termSchool.eb
 node loadEbData.js --schoolSetCurrentTerm --forReal -- dataFiles/eb/schoolSetup/school.eb
