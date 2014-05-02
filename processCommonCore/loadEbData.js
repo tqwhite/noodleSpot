@@ -5,31 +5,24 @@ node loadEbData.js --student --forReal -- dataFiles/eb/student.eb
 node loadEbData.js --student --forReal dataFiles/uff/student.uff
 node loadEbData.js --studentAssignment --forReal dataFiles/eb/studentAssignment.eb
 
-node loadEbData.js --school --forReal -- dataFiles/eb/school.eb
 node loadEbData.js --teacher --forReal -- dataFiles/eb/teacher.eb
 node loadEbData.js --teacher --forReal -- dataFiles/uff/teacher.uff
 
-node loadEbData.js --term --forReal -- dataFiles/eb/term.eb
-node loadEbData.js --term --forReal -- dataFiles/eb/termSchool.eb
-node loadEbData.js --term --forReal -- dataFiles/uff/term.uff
-node loadEbData.js --term -- dataFiles/uff/term.uff
-
-node loadEbData.js --gradeLevel --forReal dataFiles/eb/gradeLevel.eb
-node loadEbData.js --gradeLevel --forReal dataFiles/eb/gradeLevelSchool.eb
-node loadEbData.js --gradeLevel --forReal dataFiles/uff/gradeLevel.uff
-node loadEbData.js --gradeLevel dataFiles/uff/gradeLevel.uff
-node loadEbData.js --gradeLevel dataFiles/eb/gradeLevel.eb
-
-node loadEbData.js --rosmat --forReal dataFiles/XXX.eb
-NOTE: eb/dictionary specifies all eb files constructed with firstLineOfFile, not so uff
-
-SEQUENCE
+EB SEQUENCE
 node loadEbData.js --school --forReal -- dataFiles/eb/schoolSetup/school.eb
 node loadEbData.js --gradeLevel --forReal dataFiles/eb/schoolSetup/gradeLevel.eb
 node loadEbData.js --gradeLevelSchool --forReal dataFiles/schoolSetup/eb/gradeLevelSchool.eb
 node loadEbData.js --term --forReal -- dataFiles/eb/schoolSetup/term.eb
 node loadEbData.js --termSchool --forReal -- dataFiles/eb/schoolSetup/termSchool.eb
 node loadEbData.js --schoolSetCurrentTerm --forReal -- dataFiles/eb/schoolSetup/school.eb
+
+
+UFF SEQUENCE
+node loadEbData.js --school --skipFirstLine --forReal dataFiles/uff/schoolSetup/school.uff
+node loadEbData.js --term --skipFirstLine --forReal dataFiles/uff/schoolSetup/term.uff
+node loadEbData.js --schoolSetCurrentTerm --forReal -- dataFiles/uff/schoolSetup/schoolSetCurrentTerm.uff
+node loadEbData.js --gradeLevel --skipFirstLine --forReal dataFiles/uff/schoolSetup/gradeLevel.uff
+
 
 */
 

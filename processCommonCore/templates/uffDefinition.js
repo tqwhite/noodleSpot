@@ -1,52 +1,111 @@
 'use strict';
 var qtools = require('qtools');
-module.exports={
-	
-	//also need school/save and gradeLevel/save and term/save
 
+var schoolFieldList=["District", 	"District Type", 	"School Code", 	"School Name", 	"SchoolMinimumGrade", 	"SchoolMaximumGrade", 	"SchoolLevelName", 	" SchoolAreaName", 	"SuperintendentLastName", 	"SuperintendentFirstName", 	"SuperintendentMiddleName", 	"AreaSuperintendentLastName", 	"AreaSuperintendentFirstName", 	"AreaSuperintendentMiddleName", 	"PrincipalLastName", 	"PrincipalFirstName", 	"PrincipalMiddleName", 	"SchoolPrimaryPhone", 	"SchoolAlternatePhone", 	"SchoolFaxNumber", 	"AddressLine1", 	"AddressLine2", 	"AddressLine3", 	"City Name", 	"CountyName", 	"StateCode", 	"StateName", 	"ZipCode"]
+var termFieldList=["SchoolYear", "SchoolNumber", "Term Description", "StartDate", "EndDate", "TermType", "Term Number"]; 
+
+var synthSeq=0;
+var syntheticSequenceNumber=function(itemObj, sourceItem){
+	return synthSeq++;
+}
+
+
+module.exports={
+
+	
+//NOTE: maps property are "sourceFileFieldName":"targetJsonPropertyName". Empty map, {}, emits entire fieldlist.
+//ALSO: translations are executed *after* maps are set. Their format is: "targetJsonPropertyName": function
+		//Translations are 1) the only way to use a source field twice, and
+		//2) the only way to *create* a field that does not map to a source field
+
+	
+	"school": //"Section": //rosmat/init
+		{
+			"schemaName":"from Plans4.x Import File Formats",
+			"fieldList":schoolFieldList,
+			"maps":{
+					"expressbook":{
+						"District":"LeaInfo.LocalId",
+						"School Code":"LocalId",
+						"School Name":"SchoolName",
+						"StateCode":"StateProvinceId"
+					}
+				},
+			"translation":{}
+		},
 	
 	"term": //"Section": //rosmat/init
 		{
-			"schemaName":"grades",
-			"fieldList":
-				["SchoolYear",
-				"SchoolNumber",
-				"Term Description",
-				"StartDate",
-				"EndDate",
-				"TermType",
-				"Term Number"],
+			"schemaName":"??",
+			"fieldList":termFieldList,
 			"maps":{
 					"expressbook":{
 						"Term Description":"Title",
 						"Term Number":"AbbrevTitle",
 						"TermType":"YearLongTerm",
-						"EndDate":"SequenceNum"
+						"SchoolNumber":"SchoolInfo.LocalId"
 					}
 				},
 			"translation":{
 				"expressbook":{
-					"YearLongTerm":function(itemObj, sourceItem){
-						return (sourceItem.TermType==='YR')?1:0;
-					},
 					"SequenceNum":function(itemObj, sourceItem){
-
-						return +sourceItem["Term Number"]; //the unary + forces a string into a number
+						var millisecondsPerDay=86400000,
+							offset=Date.parse("1/1/2014")/millisecondsPerDay,
+							start=Date.parse(sourceItem["StartDate"])/millisecondsPerDay,
+							daysSinceOffset=start-offset
+						return Math.round(daysSinceOffset);
 					},
-					"LocalId":function(itemObj, sourceItem){
-						return sourceItem["Term Description"];
-					},
-					"SchoolInfo.LocalId":function(itemObj, sourceItem){
 					
-					if (qtools.isNotEmpty(sourceItem["SchoolNumber"])){
-						return sourceItem["SchoolNumber"];
-					}	
-						else{
-							return "<!omitProperty!>";
+					"LocalId":function(itemObj, sourceItem){
+					if (typeof(sourceItem["Term Number"])!=='undefined'){
+						return sourceItem["Term Number"];
 					}
+					else{
+						return '<!omitProperty!>';
+					}	
+					}
+					}
+					
+			}
+		},
+		
+	"termSchool": //implemented for symmetry, not required by current UFF structure which repeats term data
+		{
+			"schemaName":"grades",
+			"getFieldNamesFrom":'fieldList',
+			"fieldList":termFieldList,
+			"maps":{
+					"expressbook":{
+						"SchoolNumber":"SchoolInfo.LocalId"
+					}
+				},
+			"translation":{
+				"expressbook":{
+					
+					"LocalId":function(itemObj, sourceItem){
+					if (typeof(sourceItem["Term Number"])!=='undefined'){
+						return sourceItem["Term Number"];
+					}
+					else{
+						return '<!omitProperty!>';
+					}	
+					}
+					}
+			}
+		},
+
+	"schoolSetCurrentTerm"://"StudentBase": //student/save
+		{
+			"schemaName":"SchoolInfo",
+			"getFieldNamesFrom":'firstLineOfFile',
+			"fieldList":schoolFieldList,
+			"maps":{
+					"expressbook":{
+					"District":"LeaInfo.LocalId",
+					"School Code":"LocalId",
+					"Term Number":"CurrentTerm.LocalId"
 					}
 				}
-			}
 		},
 		
 	"gradeLevel": //"Section": //rosmat/init
@@ -70,9 +129,7 @@ module.exports={
 					"LocalId":function(itemObj, sourceItem){
 						return sourceItem["Grade"];
 					},
-					"SequenceNum":function(itemObj, sourceItem){
-						return +sourceItem["Grade"]; //the unary + forces a string into a number
-					}
+					"SequenceNum":syntheticSequenceNumber
 				}
 			}
 			

@@ -12,9 +12,16 @@ return item.replace(/(\w+)(RefId|LocalId)/, "$1.$2")
 				"SchoolInfoLocalId"];
 var schoolFieldList=["LeaInfoLocalId", "LocalId",	"StateProvinceId",	"NCESId",	"SchoolName",	"SchoolURL",	"OperationalStatus",	"CongressionalDistrict",	"CurrentTermRefId"];
 var gradeLevelFieldList=["LocalId", 	"Title", 	"AbbrevTitle", 	"SequenceNum", 	"SuppressDisplay", 	"SchoolInfoLocalId"];		
+var studentFieldList=["RefId", "Version", "FirstName", "LastName", "FullName", "LocalId", "StateProvinceId", "ProjectedGraduationYear", "OnTimeGraduationYear", "GraduationDate", "Title1Specified", "PrimaryRosmat.RefId", "GradeLevel.RefId"];
+
+
 module.exports={
 	
-	//also need school/save and gradeLevel/save and term/save
+//NOTE: maps property are "sourceFileFieldName":"targetJsonPropertyName". Empty map, {}, emits entire fieldlist.
+//ALSO: translations are executed *after* maps are set. Their format is: "targetJsonPropertyName": function
+		//Translations are 1) the only way to use a source field twice, and
+		//2) the only way to *create* a field that does not map to a source field
+
 	
 	"term": //"Section": //rosmat/init
 		{
@@ -154,14 +161,9 @@ module.exports={
 		{
 			"schemaName":"StudentPersonal",
 			"getFieldNamesFrom":'firstLineOfFile',
-			"fieldList":
-				["RefId", "Version", "FirstName", "LastName",
-				"FullName", "LocalId", "StateProvinceId",
-				"ProjectedGraduationYear", "OnTimeGraduationYear",
-				"GraduationDate", "Title1Specified",
-				"PrimaryRosmat.RefId", "GradeLevel.RefId"],
+			"fieldList":studentFieldList,
 			"maps":{
-					"expressbook":explodeCompoundRefId
+					"expressbook":{}
 				}
 		},
 		

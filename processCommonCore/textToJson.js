@@ -78,10 +78,9 @@ var moduleFunction = function(fileName, definition) {
 						//		self.rawFileContent=data;
 								self.lineList=data.split("\n");
 								fs.close(fd);
-				
-		
+					
 								if (self.definition.getFieldNamesFrom=='firstLineOfFile'){
-									self.headerList=self.lineList.splice(0, 1)[0].split('\t');
+									self.headerList=self.lineList[0].split('\t');
 									self.skipFirstLine=true;
 								} else {
 									self.headerList=self.definition.fieldList;
