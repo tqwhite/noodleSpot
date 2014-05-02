@@ -50,7 +50,7 @@ var moduleFunction=function(args){
 // var wrappedPayload={postData:jsonPayload};
 
 		if(self.dryRun){
-			setTimeout(function(){callback('', {}, 'dry run', self);}, 500); //process.nextTick() beat the file system callback in the outer universe
+			callback();
 			return;
 		}
 
@@ -76,7 +76,7 @@ var moduleFunction=function(args){
 	
 	executePost=function(path, payload, callback){
 		self.payload=payload;
-		var wrappedPayload=wrapDataForServer({data:payload});
+		var wrappedPayload=wrapDataForServer({data:payload}); //<--- NOTE: Wraps payload
 			self.document(wrappedPayload);
 	
 		if (self.dryRun){
@@ -93,7 +93,6 @@ var moduleFunction=function(args){
 			uri: self.baseUrl+path,
 			form:    wrappedPayload
 			}, function(error, response, body){
-
 				self.document(response);
 				if (typeof(callback)=='function'){ callback(response);}
 			});
@@ -121,7 +120,7 @@ var moduleFunction=function(args){
 			self.transcript.push(item);
 		};
 	
-	this.saveList=function(saveObj, callback){
+	this.saveList=function(saveObj, destPath, callback){
 
 		var list=saveObj.standardsList;
 		for (var i=0, len=list.length; i<len; i++){
@@ -129,22 +128,40 @@ var moduleFunction=function(args){
 
 			var data=saveObj.wrapperFunction(element);
 
-			var destPath='/data/District/SaveRealms';
 			executePost(destPath, data, callback);
 		}
 		
 	}
 	
-	this.saveStudents=function(saveObj, callback){
+	this.saveStudentsORIG=function(saveObj, destPath, callback){
+
+		var list=saveObj;
+		for (var i=0, len=list.length; i<len; i++){
+			var element=list[i];
+
+			var data=element;
+
+			executePost(destPath, data, callback);
+		}
+		
+	}
 	
-		console.log('savingStudents');
+	this.saveCompletedObject=function(saveObj, destPath, callback){
+	
+			executePost(destPath, saveObj, callback);
+		
+	}
+	
+	this.pingApiEndpoint=function(destPath){
+		
+			executePost(destPath, {hello:'goodbye'}, self.writeResultMessages);
 	}
 	
 	this.writeResultMessages=function(response){
 		var ebErrorStatus=extractEbErrorStatus(response);
 		var statusCode=ebErrorStatus.statusCode;
 		var errorMessage=ebErrorStatus.errorMessage;
-		var outString;
+		var outString='';
 		
 		var time=new Date();
 		if (self.dumpJson){
@@ -152,12 +169,15 @@ var moduleFunction=function(args){
 			outString+=JSON.stringify(self.payload);
 		}
 		outString+='\n\n\n=======================================================\n'+time+'/n';
-		outString+='response.statusCode='+response.statusCode;
-		outString+='response.statusMessage='+response.statusMessage;
-		if (errorMessage){outString+='errorMessage='+errorMessage;}
-		outString+='expressbook.statusCode='+statusCode;
+		outString+='\nresponse.statusCode='+response.statusCode;
+		outString+='\nresponse.statusMessage='+response.statusMessage;
+		outString+='\nresponse.Data='+response.Data;
+		if (errorMessage){outString+='\nerrorMessage='+errorMessage;}
+		outString+='\nexpressbook.statusCode='+statusCode;
+		if (!errorMessage){
+		outString+='\nresponse.body='+util.inspect(JSON.parse(response.body), {colors:true});}
 		outString+='\n'+time+'\n=======================================================\n\n\n';
-		
+
 		console.log(outString);
 	}
 

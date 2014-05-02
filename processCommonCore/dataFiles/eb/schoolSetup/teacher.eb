@@ -1,0 +1,3 @@
+UserName	Password	LDAP	Active	LocalId	FirstName	LastName	MiddleName	PreferredName	PhoneNumber	IgnoreImport
+third_second	test	0	1	third_second	ThirdGrade	SecondSchool	NULL	third_second	NULL	0
+third_initial	test	0	1	third_initial	ThirdGrade	InitialSchool	NULL	third_initial	NULL	0

@@ -1,0 +1,4 @@
+LeaInfoLocalId	LocalId	StateProvinceId	NCESId	SchoolName	SchoolURL	OperationalStatus	CongressionalDistrict	CurrentTermLocalId
+11	ebAlpha	NULL	NULL	Alpha School	NULL	NULL	NULL	ebTerm1
+11	ebBeta	NULL	NULL	Beta School	NULL	NULL	NULL	ebTerm1
+11	ebGamma	NULL	NULL	Gamma School	NULL	NULL	NULL	ebTerm1
