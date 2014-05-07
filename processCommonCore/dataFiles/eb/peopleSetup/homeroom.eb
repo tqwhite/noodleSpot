@@ -1,0 +1,7 @@
+LocalId	Title	AbbrevTitle	Expiration	MarkingRule	ImportCode	RosmatType	JsonStorage	SchoolInfo.LocalId	GradeLevel.LocalId
+ebAlphaG1	HR:ebAlpha:ebOne:ebAlphaG1	HR:ebAlphaG1		1		Homeroom	{}	ebAlpha	ebOne
+ebAlphaG2	HR:ebAlpha:ebTwo:ebAlphaG2	HR:ebAlphaG2		1		Homeroom	{}	ebAlpha	ebTwo
+ebBetaG1	HR:ebBeta:ebOne:ebBetaG1	HR:ebBetaG1		1		Homeroom	{}	ebBeta	ebOne
+ebBetaG2	HR:ebBeta:ebTwo:ebBetaG2	HR:ebBetaG2		1		Homeroom	{}	ebBeta	ebTwo
+ebGammaG1	HR:ebGamma:ebOne:ebGammaG1	HR:ebGammaG1		1		Homeroom	{}	ebGamma	ebOne
+ebGammaG2	HR:ebGamma:ebTwo:ebGammaG2	HR:ebGammaG2		1		Homeroom	{}	ebGamma	ebTwo

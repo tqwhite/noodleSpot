@@ -4,15 +4,12 @@ var explodeCompoundRefId=function(item, inx, entire){
 qtools.dump({'\n\n===== entire =====\n':entire});
 return item.replace(/(\w+)(RefId|LocalId)/, "$1.$2")
 };
- var termFieldList=["Title",
-				"AbbrevTitle",
-				"YearLongTerm",
-				"SequenceNum",
-				"LocalId",
-				"SchoolInfoLocalId"];
+var termFieldList=["Title", "AbbrevTitle", "YearLongTerm", "SequenceNum", "LocalId", "SchoolInfoLocalId"]; 
 var schoolFieldList=["LeaInfoLocalId", "LocalId",	"StateProvinceId",	"NCESId",	"SchoolName",	"SchoolURL",	"OperationalStatus",	"CongressionalDistrict",	"CurrentTermRefId"];
 var gradeLevelFieldList=["LocalId", 	"Title", 	"AbbrevTitle", 	"SequenceNum", 	"SuppressDisplay", 	"SchoolInfoLocalId"];		
 var studentFieldList=["RefId", "Version", "FirstName", "LastName", "FullName", "LocalId", "StateProvinceId", "ProjectedGraduationYear", "OnTimeGraduationYear", "GraduationDate", "Title1Specified", "PrimaryRosmat.RefId", "GradeLevel.RefId"];
+var teacherFieldList=["RefId", "Version", "UserName", "Password", "LDAP", "LastLogin", "LoginAttempts", "Active", "LocalId", "FirstName", "LastName", "MiddleName", "PreferredName", "PhoneNumber", "IgnoreImport"]; 
+
 
 
 module.exports={
@@ -22,8 +19,87 @@ module.exports={
 		//Translations are 1) the only way to use a source field twice, and
 		//2) the only way to *create* a field that does not map to a source field
 
+		
+	"teacher"://create UserInfo, standalone
+		{
+			"schemaName":"UserBase",
+			"getFieldNamesFrom":'firstLineOfFile',
+			"fieldList":teacherFieldList,
+			"maps":{},
+			"translation":{
+				"expressbook":{
+					"Active":function(itemObj, sourceItem){
+					if (typeof(sourceItem["Active"])!=='undefined'){
+						return +sourceItem["Active"]; //the unary + forces a string into a number
+					}
+					else{
+						return '<!omitProperty!>';
+					}	
+					},
+					"LDAP":function(itemObj, sourceItem){
+					if (typeof(sourceItem["LDAP"])!=='undefined'){
+						return +sourceItem["LDAP"]; //the unary + forces a string into a number
+					}
+					else{
+						return '<!omitProperty!>';
+					}	
+					}
+					}
+			}
+		},
 	
-	"term": //"Section": //rosmat/init
+	"homeroom": //"Section": //rosmat/init
+		{
+			"schemaName":"Rosmat",
+			"getFieldNamesFrom":'firstLineOfFile',
+			"fieldList":
+				["RefId", "Version", "Title", "AbbrevTitle",
+				"Expiration", "MarkingRule", "ImportCode", "RosmatType",
+				"JsonStorage", "OwnerUserInfoRefId", "SchoolInfoRefId",
+				"FixedCurriculumRefId", "SourceStudentListRefId",
+				"LocalId"],
+			"maps":{
+					"expressbook":{}
+				}
+		},
+
+	"studentAssignment"://"SectionStudent": //rosmat/attachStudents
+		{
+			"schemaName":"StudentAssignment",
+			"getFieldNamesFrom":'firstLineOfFile',
+			"fieldList":
+				["Rosmat.RefId", "LocalId", "RefId"],
+			"maps":{
+					"expressbook":explodeCompoundRefId
+				}
+		},
+		
+	"teacherAssignment"://"SectionStaff": //rosmat/addTeachers
+		{
+			"schemaName":"UserInfoAssignment",
+			"getFieldNamesFrom":'firstLineOfFile',
+			"fieldList":
+				["Rosmat.RefId", "LocalId", "RefId"],
+			"maps":{
+					"expressbook":explodeCompoundRefId
+				}
+		},
+		
+		
+		
+	"student"://define student record, attaches personal gradelevel
+		{
+			"schemaName":"StudentPersonal",
+			"getFieldNamesFrom":'firstLineOfFile',
+			"fieldList":studentFieldList,
+			"maps":{
+					"expressbook":{}
+				}
+		},
+
+
+	
+	"term": //defines term, standalone
 		{
 			"schemaName":"grades",
 			"getFieldNamesFrom":'firstLineOfFile',
@@ -51,7 +127,7 @@ module.exports={
 			}
 		},
 		
-	"termSchool": //"Section": //rosmat/init
+	"termSchool": //attaches terms to schools
 		{
 			"schemaName":"grades",
 			"getFieldNamesFrom":'firstLineOfFile',
@@ -76,7 +152,7 @@ module.exports={
 			}
 		},
 
-	"gradeLevel"://"StudentBase": //student/save
+	"gradeLevel"://defines gradeLevel, standalone
 		{
 			"schemaName":"GradeLevel",
 			"getFieldNamesFrom":'firstLineOfFile',
@@ -105,7 +181,7 @@ module.exports={
 			}
 		},
 
-	"gradeLevelSchool"://"StudentBase": //student/save
+	"gradeLevelSchool"://attaches gradeLevels to schools
 		{
 			"schemaName":"GradeLevel",
 			"getFieldNamesFrom":'firstLineOfFile',
@@ -121,7 +197,7 @@ module.exports={
 			}
 		},
 
-	"school"://"StudentBase": //student/save
+	"school"://defines school, standalone
 		{
 			"schemaName":"SchoolInfo",
 			"getFieldNamesFrom":'firstLineOfFile',
@@ -140,7 +216,7 @@ module.exports={
 				}
 		},
 
-	"schoolSetCurrentTerm"://"StudentBase": //student/save
+	"schoolSetCurrentTerm"://sets the current term for each school
 		{
 			"schemaName":"SchoolInfo",
 			"getFieldNamesFrom":'firstLineOfFile',
@@ -152,73 +228,6 @@ module.exports={
 					"CurrentTermLocalId":"CurrentTerm.LocalId"
 					}
 				}
-		},
-		
-		
-		
-		
-	"student"://"StudentBase": //student/save
-		{
-			"schemaName":"StudentPersonal",
-			"getFieldNamesFrom":'firstLineOfFile',
-			"fieldList":studentFieldList,
-			"maps":{
-					"expressbook":{}
-				}
-		},
-		
-	"teacher"://"UserBase": //userInfo/save
-		{
-			"schemaName":"UserBase",
-			"getFieldNamesFrom":'firstLineOfFile',
-			"fieldList":
-				["RefId", "Version", "UserName", "Password", "LDAP",
-				"LastLogin", "LoginAttempts", "Active", "LocalId",
-				"FirstName", "LastName", "MiddleName", "PreferredName",
-				"PhoneNumber", "IgnoreImport"],
-			"maps":{
-					"expressbook":explodeCompoundRefId
-				}
-		},
-	
-	"rosmat": //"Section": //rosmat/init
-		{
-			"schemaName":"Rosmat",
-			"getFieldNamesFrom":'firstLineOfFile',
-			"fieldList":
-				["RefId", "Version", "Title", "AbbrevTitle",
-				"Expiration", "MarkingRule", "ImportCode", "RosmatType",
-				"JsonStorage", "OwnerUserInfoRefId", "SchoolInfoRefId",
-				"FixedCurriculumRefId", "SourceStudentListRefId",
-				"LocalId"],
-			"maps":{
-					"expressbook":explodeCompoundRefId
-				}
-		},
-
-	"studentAssignment"://"SectionStudent": //rosmat/attachStudents
-		{
-			"schemaName":"StudentAssignment",
-			"getFieldNamesFrom":'firstLineOfFile',
-			"fieldList":
-				["Rosmat.RefId", "LocalId", "RefId"],
-			"maps":{
-					"expressbook":explodeCompoundRefId
-				}
-		},
-		
-	"teacherAssignment"://"SectionStaff": //rosmat/addTeachers
-		{
-			"schemaName":"UserInfoAssignment",
-			"getFieldNamesFrom":'firstLineOfFile',
-			"fieldList":
-				["Rosmat.RefId", "LocalId", "RefId"],
-			"maps":{
-					"expressbook":explodeCompoundRefId
-				}
-		},
-
-
-
+		}
 
 };

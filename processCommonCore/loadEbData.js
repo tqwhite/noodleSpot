@@ -1,8 +1,6 @@
 "use strict";
 var qtools = require('qtools');
 /*
-node loadEbData.js --student --forReal -- dataFiles/eb/student.eb
-node loadEbData.js --student --forReal dataFiles/uff/student.uff
 node loadEbData.js --studentAssignment --forReal dataFiles/eb/studentAssignment.eb
 
 node loadEbData.js --teacher --forReal -- dataFiles/eb/teacher.eb
@@ -16,12 +14,23 @@ node loadEbData.js --term --forReal -- dataFiles/eb/schoolSetup/term.eb
 node loadEbData.js --termSchool --forReal -- dataFiles/eb/schoolSetup/termSchool.eb
 node loadEbData.js --schoolSetCurrentTerm --forReal -- dataFiles/eb/schoolSetup/school.eb
 
+node loadEbData.js --student --forReal -- dataFiles/eb/peopleSetup/student.eb
+node loadEbData.js --teacher --forReal -- dataFiles/eb/peopleSetup/teacher.eb
+
+
+node loadEbData.js --homeroom --skipFirstLine --forReal -- dataFiles/eb/peopleSetup/homeroom.eb
 
 UFF SEQUENCE
 node loadEbData.js --school --skipFirstLine --forReal dataFiles/uff/schoolSetup/school.uff
 node loadEbData.js --term --skipFirstLine --forReal dataFiles/uff/schoolSetup/term.uff
 node loadEbData.js --schoolSetCurrentTerm --forReal -- dataFiles/uff/schoolSetup/schoolSetCurrentTerm.uff
 node loadEbData.js --gradeLevel --skipFirstLine --forReal dataFiles/uff/schoolSetup/gradeLevel.uff
+
+node loadEbData.js --student --skipFirstLine --forReal dataFiles/uff/peopleSetup/student.uff
+node loadEbData.js --teacher --skipFirstLine --forReal -- dataFiles/peopleSetup/uff/teacher.uff
+
+
+node loadEbData.js --homeroom --skipFirstLine --forReal -- dataFiles/uff/peopleSetup/homeroom.uff
 
 
 */
@@ -38,7 +47,7 @@ program.version('tqTest')
 	.option('-y, --student', 'upload students')
 	.option('-y, --teacher', 'upload teachers')
 	
-	.option('-y, --rosmat', 'create a new rosmat for later student attaching')
+	.option('-y, --homeroom', 'create a new homeroom for later student attaching')
 	
 	.option('-y, --studentAssignment', 'attach students to rosmats')
 	.option('-y, --teacherAssignment', 'attach teachers to rosmats')
@@ -124,16 +133,6 @@ if (program.school) {
 			fileName:fileName
 			};
 	}
-
-	else if (program.studentAssignment) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/EnrollStudents',
-			endPointWrapperName:'assignmentPairs',
-			definitionName:'studentAssignment',
-			fileName:fileName
-			};
-	}
 	
 
 	else if (program.teacher) {
@@ -156,10 +155,16 @@ if (program.school) {
 			fileName:fileName
 			};
 	} 
+	
 
-	else if (program.rosmat) {
-		console.log("program.rosmat not yet implemented");
-		process.exit(1);
+	else if (program.homeroom) {
+		var controlObj={
+			accessModelMethodName:'saveCompletedObject',
+			apiEndpoint:'/data/Api1/Homeroom',
+			endPointWrapperName:'Homerooms',
+			definitionName:'homeroom',
+			fileName:fileName
+			};
 	}
 
 	else if (program.teacherAssignment) {
@@ -175,6 +180,16 @@ if (program.school) {
 			process.exit(1);
 
 	}  
+
+	else if (program.studentAssignment) {
+		var controlObj={
+			accessModelMethodName:'saveCompletedObject',
+			apiEndpoint:'/data/Api1/EnrollStudents',
+			endPointWrapperName:'assignmentPairs',
+			definitionName:'studentAssignment',
+			fileName:fileName
+			};
+	}
 
 	else if (program.studentAssignment_Nested_ROSMATVERSIONWORKS) {
 		var controlObj={

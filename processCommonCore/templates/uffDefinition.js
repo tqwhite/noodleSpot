@@ -18,23 +18,202 @@ module.exports={
 		//Translations are 1) the only way to use a source field twice, and
 		//2) the only way to *create* a field that does not map to a source field
 
-	
-	"school": //"Section": //rosmat/init
+//[doc1] - MN SIS Extract Files - Unified_V9(In Progress)
+//[doc2] - Plans4.x Import File Formats
+//[doc3] - DWextractLayout
+
+
+
+
+	"teacher"://[doc1-User Base File]
 		{
-			"schemaName":"from Plans4.x Import File Formats",
-			"fieldList":schoolFieldList,
+			"schemaName":"UserBase",
+			"fieldList":
+				["DistrictCode", "Filler2", "StaffUniqueIdentifier",
+				"SchoolYearBeg", "SchoolYearEnd", "EmployeeID",
+				"LocalStaffCode", "State School/PlantNumber",
+				"LastName", "MiddleName", "FirstName", "FullName",
+				"JobCode1", "JobCode2", "JobCode3", "JobCode4", "Phone",
+				"Email", "Department1", "Department2", "Department3",
+				"Department4", "Status", "PrimaryLocationFlag", "Login Name", 
+				"Password", "Default Password"],
 			"maps":{
 					"expressbook":{
-						"District":"LeaInfo.LocalId",
-						"School Code":"LocalId",
-						"School Name":"SchoolName",
-						"StateCode":"StateProvinceId"
+						"State School/PlantNumber":"SchoolInfo.RefId",
+						"EmployeeID":"LocalId",
+						"LastName":"MiddleName",
+						"MiddleName":"LastName",
+						"FirstName":"FirstName",
+						"FullName":"PreferredName",
+						"Phone":"PhoneNumber",
+						"Login Name":"UserName",
+						"Password":"Password"
+						}
+				}, 
+
+			"translation": {
+				"expressbook": {
+					"Active": function(itemObj, sourceItem) {
+						if (sourceItem.Status==='A'){
+							return 1;
+						}
+						else{
+							return 0;
+						}
+					},
+
+					"LDAP": function(itemObj, sourceItem) {
+						return 0;
+					},
+
+					"UserName": function(itemObj, sourceItem) {
+						if (sourceItem["Login Name"]){
+							return sourceItem["Login Name"];
+						}
+						else{
+							return sourceItem["EmployeeID"];
+						}
+					},
+
+					"Password": function(itemObj, sourceItem) {
+						if (sourceItem["Login Name"]){
+							return sourceItem["Password"];
+						}
+						else{
+							return 'test';
+						}
 					}
-				},
-			"translation":{}
+				}
+
+			}
 		},
 	
-	"term": //"Section": //rosmat/init
+	"homeroom": //[doc1-Section File]
+		{
+			"schemaName":"Section",
+			"fieldList":
+				["DistrictCode", "DistrictType", "SchoolCode",
+				"SectionNumber", "CourseNumber", "TermAbbrev",
+				"SchoolYearBeg", "SchoolYearEnd", "Grade", "BeginDate",
+				"EndDate", "Location", "HomeroomFlag", "BegPeriodNum",
+				"EndPeriodNum", "Credit", "TeamCode", "Track"],
+			"maps":{
+					"expressbook":{
+						"SchoolCode":"SchoolInfo.LocalId",
+						"Grade":"GradeLevel.LocalId"
+						}
+				}, 
+
+			"translation": {
+				"expressbook": {
+					"RosmatType": function(itemObj, sourceItem) {
+						if (sourceItem.HomeroomFlag==='Y'){
+							return 'Homeroom';
+						}
+						else{
+							return 'Adhawk';
+						}
+					},
+
+					"Title": function(itemObj, sourceItem) {
+						if (sourceItem.HomeroomFlag==='Y'){
+							var prefix='HR:';
+						}
+						else{
+							var prefix='';
+						}
+						return prefix+sourceItem.SchoolCode+':'+sourceItem.Grade+':'+sourceItem.SectionNumber;
+					},
+
+					"LocalId": function(itemObj, sourceItem) {
+						return sourceItem.SectionNumber;
+					},
+
+					"AbbrevTitle": function(itemObj, sourceItem) {
+						if (sourceItem.HomeroomFlag==='Y'){
+							var prefix='HR:';
+						}
+						else{
+							var prefix='';
+						}
+						return prefix+sourceItem.SchoolCode;
+					},
+
+					"JsonStorage": function(itemObj, sourceItem) {
+						return "{}";
+					},
+
+					"MarkingRule": function(itemObj, sourceItem) {
+						return 1;
+					}
+				}
+
+			}
+		},
+
+	"studentAssignment"://[doc1-Student Enrollment File]
+		{
+			"schemaName":"SectionStudent",
+			"fieldList":
+				["DistrictCode", "DistrictType", "SchoolCode",
+				"StudentUniqueIdentifier", "StateStudentNumber",
+				"LocalStudentNumber", "SchoolYearBeg", "SchoolYearEnd",
+				"SectionNumber", "CourseNumber", "GradeLevel",
+				"EntryDate", "WithdrawalDate", "EntryType",
+				"Withdrawaltype"],
+			"maps":{
+					"expressbook":{
+						}
+				}
+		},
+
+	"teacherAssignment"://[doc1-Section Staff File ]
+		{
+			"schemaName":"SectionStaff",
+			"fieldList":
+				["DistrictCode", "DistrictType", "SchoolCode",
+				"StaffUniqueIdentifier", "LocalStaffCode",
+				"SchoolYearBeg", "SchoolYearEnd", "SectionNumber",
+				"CourseNumber", "Grade", "PrimaryInstructorFlag",
+				"LastName", "MiddleName", "FirstName"],
+			"maps":{
+					"expressbook":{
+						}
+				}
+		},
+		
+		
+
+	"student"://define student, standalone. from: [doc1-Student Base File]
+		{
+			"schemaName":"StudentBase",
+			"fieldList":
+				["DistrictCode", "DistrictType", "SchoolCode",
+				"SchoolYearBegin", "SchoolYearEnd",
+				"StudentUniqueIdentifier", "StateStudentNumber",
+				"LocalStudentNumber", "GradeLevel", "Graduation Year",
+				"Student Status", "LastName", "MiddleName", "FirstName",
+				"Suffix", "Prefix", "FullName", "PreferredName",
+				"LastSchoolAttended", "Concurrent Enrollment",
+				"BirthDate", "Self Guardian Flag", "Gender", "SSN",
+				"BirthPlace", "BirthState", "BirthCountry",
+				"EthnicityCode"],
+			"maps":{
+					"expressbook":{
+						"StudentUniqueIdentifier": "LocalId",
+						"LastName": "LastName",
+						"FullName": "FullName",
+						"FirstName": "FirstName",
+					}
+				},
+			"translation":{
+				"expressbook":{
+				}
+			}
+		},	
+		
+		
+	"term": //define term, attach to school, from: [doc3-Term File]
 		{
 			"schemaName":"??",
 			"fieldList":termFieldList,
@@ -69,46 +248,7 @@ module.exports={
 			}
 		},
 		
-	"termSchool": //implemented for symmetry, not required by current UFF structure which repeats term data
-		{
-			"schemaName":"grades",
-			"getFieldNamesFrom":'fieldList',
-			"fieldList":termFieldList,
-			"maps":{
-					"expressbook":{
-						"SchoolNumber":"SchoolInfo.LocalId"
-					}
-				},
-			"translation":{
-				"expressbook":{
-					
-					"LocalId":function(itemObj, sourceItem){
-					if (typeof(sourceItem["Term Number"])!=='undefined'){
-						return sourceItem["Term Number"];
-					}
-					else{
-						return '<!omitProperty!>';
-					}	
-					}
-					}
-			}
-		},
-
-	"schoolSetCurrentTerm"://"StudentBase": //student/save
-		{
-			"schemaName":"SchoolInfo",
-			"getFieldNamesFrom":'firstLineOfFile',
-			"fieldList":schoolFieldList,
-			"maps":{
-					"expressbook":{
-					"District":"LeaInfo.LocalId",
-					"School Code":"LocalId",
-					"Term Number":"CurrentTerm.LocalId"
-					}
-				}
-		},
-		
-	"gradeLevel": //"Section": //rosmat/init
+	"gradeLevel": //define gradeLevel, attach to school, from: [doc3-Grade]
 		{
 			"schemaName":"grades",
 			"fieldList":
@@ -133,108 +273,34 @@ module.exports={
 				}
 			}
 			
-		},
-
-	"student"://"StudentBase": //student/save
+		},	
+		
+	"school": //define school, standalone, from: [doc3-School File]
 		{
-			"schemaName":"StudentBase",
-			"fieldList":
-				["DistrictCode", "DistrictType", "SchoolCode",
-				"SchoolYearBegin", "SchoolYearEnd",
-				"StudentUniqueIdentifier", "StateStudentNumber",
-				"LocalStudentNumber", "GradeLevel", "Graduation Year",
-				"Student Status", "LastName", "MiddleName", "FirstName",
-				"Suffix", "Prefix", "FullName", "PreferredName",
-				"LastSchoolAttended", "Concurrent Enrollment",
-				"BirthDate", "Self Guardian Flag", "Gender", "SSN",
-				"BirthPlace", "BirthState", "BirthCountry",
-				"EthnicityCode"],
+			"schemaName":"from Plans4.x Import File Formats",
+			"fieldList":schoolFieldList,
 			"maps":{
 					"expressbook":{
-						"StudentUniqueIdentifier": "LocalId",
-						"LastName": "LastName",
-						"FullName": "FullName",
-						"FirstName": "FirstName",
+						"District":"LeaInfo.LocalId",
+						"School Code":"LocalId",
+						"School Name":"SchoolName",
+						"StateCode":"StateProvinceId"
 					}
 				},
-			"translation":{
-				"expressbook":{
-				}
-			}
+			"translation":{}
 		},
 
-
-	"teacher"://"UserBase": //userInfo/save
+	"schoolSetCurrentTerm"://sets currentTerm field in school, no UFF analog
 		{
-			"schemaName":"UserBase",
-			"fieldList":
-				["DistrictCode", "Filler2", "StaffUniqueIdentifier",
-				"SchoolYearBeg", "SchoolYearEnd", "EmployeeID",
-				"LocalStaffCode", "State School/PlantNumber",
-				"LastName", "MiddleName", "FirstName", "FullName",
-				"JobCode1", "JobCode2", "JobCode3", "JobCode4", "Phone",
-				"Email", "Department1", "Department2", "Department3",
-				"Department4", "Status", "PrimaryLocationFlag", "Login Name", 
-				"Password", "Default Password"],
+			"schemaName":"SchoolInfo",
+			"getFieldNamesFrom":'firstLineOfFile',
+			"fieldList":schoolFieldList,
 			"maps":{
 					"expressbook":{
-						"UserName":"Login Name",
-						"Password":"Password",
-						"Active":"Status",
-						"LocalId":"EmployeeID",
-						"FirstName":"FirstName",
-						"LastName":"LastName",
-						"MiddleName":"MiddleName",
-						"PreferredName":"FullName"
-						}
-				}
-		},
-	
-	"rosmat": //"Section": //rosmat/init
-		{
-			"schemaName":"Section",
-			"fieldList":
-				["DistrictCode", "DistrictType", "SchoolCode",
-				"SectionNumber", "CourseNumber", "TermAbbrev",
-				"SchoolYearBeg", "SchoolYearEnd", "Grade", "BeginDate",
-				"EndDate", "Location", "HomeroomFlag", "BegPeriodNum",
-				"EndPeriodNum", "Credit", "TeamCode", "Track"],
-			"maps":{
-					"expressbook":{
-						}
-				}
-		},
-
-
-	"studentAssignment"://"SectionStudent": //rosmat/attachStudents
-		{
-			"schemaName":"SectionStudent",
-			"fieldList":
-				["DistrictCode", "DistrictType", "SchoolCode",
-				"StudentUniqueIdentifier", "StateStudentNumber",
-				"LocalStudentNumber", "SchoolYearBeg", "SchoolYearEnd",
-				"SectionNumber", "CourseNumber", "GradeLevel",
-				"EntryDate", "WithdrawalDate", "EntryType",
-				"Withdrawaltype"],
-			"maps":{
-					"expressbook":{
-						}
-				}
-		},
-
-
-	"teacherAssignment"://"SectionStaff": //rosmat/addTeachers
-		{
-			"schemaName":"SectionStaff",
-			"fieldList":
-				["DistrictCode", "DistrictType", "SchoolCode",
-				"StaffUniqueIdentifier", "LocalStaffCode",
-				"SchoolYearBeg", "SchoolYearEnd", "SectionNumber",
-				"CourseNumber", "Grade", "PrimaryInstructorFlag",
-				"LastName", "MiddleName", "FirstName"],
-			"maps":{
-					"expressbook":{
-						}
+					"District":"LeaInfo.LocalId",
+					"School Code":"LocalId",
+					"Term Number":"CurrentTerm.LocalId"
+					}
 				}
 		}
 
