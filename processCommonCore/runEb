@@ -1,0 +1,78 @@
+node loadEbData.js --school --forReal -- dataFiles/eb/schoolSetup/school.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --gradeLevel --forReal dataFiles/eb/schoolSetup/gradeLevel.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --gradeLevelSchool --forReal dataFiles/eb/schoolSetup/gradeLevelSchool.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --term --forReal -- dataFiles/eb/schoolSetup/term.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --termSchool --forReal -- dataFiles/eb/schoolSetup/termSchool.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --schoolSetCurrentTerm --forReal -- dataFiles/eb/schoolSetup/school.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --student --forReal -- dataFiles/eb/peopleSetup/student.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --teacher --forReal -- dataFiles/eb/peopleSetup/teacher.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --homeroom --skipFirstLine --forReal -- dataFiles/eb/peopleSetup/homeroom.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --studentAssignment --forReal dataFiles/eb/studentAssignment.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --teacherAssignment --forReal dataFiles/eb/teacherAssignment.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+echo "Expressbook upload completed successfully"

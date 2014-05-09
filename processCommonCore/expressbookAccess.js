@@ -67,9 +67,13 @@ var moduleFunction=function(args){
 				
 				
 				var ebErrorStatus=extractEbErrorStatus(response);
-				var statusCode=ebErrorStatus.statusCode;
+				var statusCode=ebErrorStatus.ebStatusCode;
 				var errorMessage=ebErrorStatus.errorMessage;
-		
+				
+				if (!ebErrorStatus.success){
+					qtools.die(ebErrorStatus);
+				}
+				
 				if (typeof(callback)=='function'){ callback(errorMessage, response, body);}
 			});
 	},
@@ -94,7 +98,14 @@ var moduleFunction=function(args){
 			form:    wrappedPayload
 			}, function(error, response, body){
 				self.document(response);
+				
+				var ebErrorStatus=extractEbErrorStatus(response);
+				
 				if (typeof(callback)=='function'){ callback(response);}
+				
+				if (!ebErrorStatus.success){
+					qtools.die(ebErrorStatus);
+				}
 			});
 	
 	},
@@ -107,9 +118,18 @@ var moduleFunction=function(args){
 	},
 	
 	extractEbErrorStatus=function(response){
+		var ebExtract=response.body.match(/"StatusCode": (.*?),/);
+		 var ebStatusCode=ebExtract?ebExtract[1]:'no response';
+		var responseStatusCode=response.statusCode;
+		var errorMsgExtract=response.body.match(/<title>(.*?)</);
+		 var errorMessage=errorMsgExtract?errorMsgExtract[1]:'';
+		 
+		var processWorked=(ebStatusCode=='1' && responseStatusCode=='200');
 		return {
-			statusCode:response.body.match(/("StatusCode": .*?),/),
-			errorMessage:response.body.match(/<title>.*?</)
+			success:processWorked,
+			ebStatusCode:ebStatusCode,
+			responseStatusCode:responseStatusCode,
+			errorMessage:errorMessage
 		}
 	}
 
@@ -159,7 +179,7 @@ var moduleFunction=function(args){
 	
 	this.writeResultMessages=function(response){
 		var ebErrorStatus=extractEbErrorStatus(response);
-		var statusCode=ebErrorStatus.statusCode;
+		var statusCode=ebErrorStatus.ebStatusCode;
 		var errorMessage=ebErrorStatus.errorMessage;
 		var outString='';
 		

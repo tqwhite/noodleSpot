@@ -1,11 +1,11 @@
 UserName	Password	LDAP	LastLogin	LoginAttempts	Active	LocalId	FirstName	LastName	MiddleName	PreferredName	PhoneNumber	IgnoreImport
-karen_delaforest	098F6BCD4621D373CADE4E832627B4F6	0	NULL	0	1	44586	Karen	DeLaForest		DeLaForest K		0
-liz_harvey	098F6BCD4621D373CADE4E832627B4F6	0	NULL	0	1	35012	Liz	Harvey		Harvey L		0
-carole_collier	098F6BCD4621D373CADE4E832627B4F6	0	NULL	0	1	14212	Carole L	Collier		Carole L Collier	(763) 506-1637	0
-betty_erickson	098F6BCD4621D373CADE4E832627B4F6	0	NULL	0	1	27696	Betty	Erickson		Erickson B		0
-greg_mattson	098F6BCD4621D373CADE4E832627B4F6	0	NULL	0	1	11547	Greg	Mattson		Greg Mattson	(763) 506-2110	0
-melissa_lilleberg	098F6BCD4621D373CADE4E832627B4F6	0	NULL	0	1	40636	Melissa	Lilleberg		Lilleberg M		0
-lexi_hilmoe	098F6BCD4621D373CADE4E832627B4F6	0	NULL	0	1	19639	Lexi	Hilmoe		Hilmoe L		0
-nancy_strege	098F6BCD4621D373CADE4E832627B4F6	0	NULL	0	1	17106	Nancy	Strege		Strege N		0
-jackie_turnquist	098F6BCD4621D373CADE4E832627B4F6	0	NULL	0	1	20422	Jackie	Turnquist		Turnquist J		0
-mary_judd	098F6BCD4621D373CADE4E832627B4F6	0	NULL	0	1	16676	Mary	Judd		Mary Judd	(763) 506-1717	0
+karen_delaforest	test	0	NULL	0	1	44586	Karen	DeLaForest		DeLaForest K		0
+liz_harvey	test	0	NULL	0	1	35012	Liz	Harvey		Harvey L		0
+carole_collier	test	0	NULL	0	1	14212	Carole L	Collier		Carole L Collier	(763) 506-1637	0
+betty_erickson	test	0	NULL	0	1	27696	Betty	Erickson		Erickson B		0
+greg_mattson	test	0	NULL	0	1	11547	Greg	Mattson		Greg Mattson	(763) 506-2110	0
+melissa_lilleberg	test	0	NULL	0	1	40636	Melissa	Lilleberg		Lilleberg M		0
+lexi_hilmoe	test	0	NULL	0	1	19639	Lexi	Hilmoe		Hilmoe L		0
+nancy_strege	test	0	NULL	0	1	17106	Nancy	Strege		Strege N		0
+jackie_turnquist	test	0	NULL	0	1	20422	Jackie	Turnquist		Turnquist J		0
+mary_judd	test	0	NULL	0	1	16676	Mary	Judd		Mary Judd	(763) 506-1717	0

@@ -1,7 +1,6 @@
 "use strict";
 var qtools = require('qtools');
 /*
-node loadEbData.js --studentAssignment --forReal dataFiles/eb/studentAssignment.eb
 
 node loadEbData.js --teacher --forReal -- dataFiles/eb/teacher.eb
 node loadEbData.js --teacher --forReal -- dataFiles/uff/teacher.uff
@@ -19,6 +18,9 @@ node loadEbData.js --teacher --forReal -- dataFiles/eb/peopleSetup/teacher.eb
 
 
 node loadEbData.js --homeroom --skipFirstLine --forReal -- dataFiles/eb/peopleSetup/homeroom.eb
+node loadEbData.js --studentAssignment --forReal dataFiles/eb/studentAssignment.eb
+
+node loadEbData.js --teacherAssignment --forReal dataFiles/eb/teacherAssignment.eb
 
 UFF SEQUENCE
 node loadEbData.js --school --skipFirstLine --forReal dataFiles/uff/schoolSetup/school.uff
@@ -27,10 +29,13 @@ node loadEbData.js --schoolSetCurrentTerm --forReal -- dataFiles/uff/schoolSetup
 node loadEbData.js --gradeLevel --skipFirstLine --forReal dataFiles/uff/schoolSetup/gradeLevel.uff
 
 node loadEbData.js --student --skipFirstLine --forReal dataFiles/uff/peopleSetup/student.uff
-node loadEbData.js --teacher --skipFirstLine --forReal -- dataFiles/peopleSetup/uff/teacher.uff
+node loadEbData.js --teacher --skipFirstLine --forReal -- dataFiles/uff/peopleSetup/teacher.uff
 
 
 node loadEbData.js --homeroom --skipFirstLine --forReal -- dataFiles/uff/peopleSetup/homeroom.uff
+node loadEbData.js --studentAssignment --skipFirstLine --forReal dataFiles/uff/studentAssignment.uff
+
+node loadEbData.js --teacherAssignment --skipFirstLine --forReal dataFiles/uff/teacherAssignment.uff
 
 
 */
@@ -54,7 +59,10 @@ program.version('tqTest')
 	
 	.option('-f, --skipFirstLine', 'Skip first line if header definitions are there for a schema that does not use it')
 	.option('-R, --forReal', 'for [R]eal')
-	.option('-j, --dumpJson', 'dump json').parse(process.argv);
+	.option('-j, --dumpJson', 'dump json')
+	.option('-v, --verbose', 'Verbose')
+	.option('-q, --quiet', 'Quiet, no messages')
+	.parse(process.argv);
 
 
 var ebAccess = require('./expressbookAccess.js');
@@ -170,21 +178,19 @@ if (program.school) {
 	else if (program.teacherAssignment) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Rosmat/attachStudents',
+			apiEndpoint:'/data/Api1/AssignTeachers',
 			endPointWrapperName:'assignmentPairs',
-			definitionName:'SDSDFDSFFD',
+			definitionName:'teacherAssignment',
 			fileName:fileName
 			};
-			
-			console.log("program.teacherAssignment not yet implemented");
-			process.exit(1);
+
 
 	}  
 
 	else if (program.studentAssignment) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/EnrollStudents',
+			apiEndpoint:'/data/Api1/AssignStudents',
 			endPointWrapperName:'assignmentPairs',
 			definitionName:'studentAssignment',
 			fileName:fileName
@@ -207,10 +213,11 @@ else{
 	program.outputHelp();
 	process.exit(1);
 }
-
-qtools.dump({'\n\n===== controlObj =====\n':controlObj});
-console.log('\n\attempting login');
-
+if (!program.quiet){ console.log("executing "+controlObj.definitionName); }
+if (program.verbose){
+	qtools.dump({'\n\n===== controlObj =====\n':controlObj});
+	console.log('\n\attempting login');
+}
 
 var conversionFunction = function() {
 		
@@ -223,21 +230,25 @@ var conversionFunction = function() {
 			finishedOutputObject[controlObj.endPointWrapperName]=sourceData.finishedObject; //very often, I find it useful to generate an object literal above for testing and don't want to have it overwritten here
 		}
 		
+		var wrapupCallback='no final output wanted';
 		
-		qtools.dump({sourceObjectList:sourceData.sourceObjectList});
-		qtools.dump({finishedOutputObject:finishedOutputObject});
+		if (program.verbose){
+			qtools.dump({sourceObjectList:sourceData.sourceObjectList});
+			qtools.dump({finishedOutputObject:finishedOutputObject});
 	
-		console.log('\n\nstarting api write');
-		ebAccess[controlObj.accessModelMethodName](finishedOutputObject, controlObj.apiEndpoint, ebAccess.writeResultMessages);
-	}
+			console.log('\n\nstarting api write');
+			wrapupCallback=ebAccess.writeResultMessages;
+		}
+		ebAccess[controlObj.accessModelMethodName](finishedOutputObject, controlObj.apiEndpoint, wrapupCallback);
 
+	}
 var loginFoundCallback = function(error, response, body) {
 
 		if (error) {
 			console.log('\n\n\n=======================================================\n');
 			console.log('LOGIN ERROR =' + error + '\n');
 		} else {
-			console.log('\n\nstarting conversion\n\n');
+			if (program.verbose){console.log('\n\nstarting conversion\n\n');}
 			sourceData = new converter(fileName, dictionary.get(controlObj.definitionName));
 			sourceData.on('gotData', conversionFunction);
 		}

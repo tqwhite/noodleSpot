@@ -70,7 +70,7 @@ module.exports={
 			"fieldList":
 				["Rosmat.RefId", "LocalId", "RefId"],
 			"maps":{
-					"expressbook":explodeCompoundRefId
+					"expressbook":{}
 				}
 		},
 		
@@ -81,7 +81,7 @@ module.exports={
 			"fieldList":
 				["Rosmat.RefId", "LocalId", "RefId"],
 			"maps":{
-					"expressbook":explodeCompoundRefId
+					"expressbook":{}
 				}
 		},
 		

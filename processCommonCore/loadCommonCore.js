@@ -1,8 +1,8 @@
 "use strict";
 var qtools=require('qtools');
 
-//node loadCommonCore.js --standards dataFiles/coreOrig.txt
-//node loadCommonCore.js --standards --forReal dataFiles/coreOrig.txt
+//node loadCommonCore.js --standards dataFiles/commonCore/coreOrig.txt
+//node loadCommonCore.js --standards --forReal dataFiles/commonCore/coreOrig.txt
 
 var program = require('commander');
 program
@@ -22,6 +22,7 @@ var converter=require('./textToJson.js'),
 	fileName = process.argv[process.argv.length-1], //"coreOrig.txt";
 	finishedOutputObject,
 	sourceData;
+	var dictionary = require('./templates/dictionary.js'); dictionary=new dictionary({dictionaryName:'commonCoreDefinition', target:'expressbook', skipFirstLine:program.skipFirstLine});
 
 if (program.standards){
 	var accessModelMethodName='saveList',
@@ -38,8 +39,10 @@ if (program.standards){
 				'Grade':'Grade'
 			}, 
 			'exclusive');
+		sourceData.processLines();
 		sourceData.convert();
-	
+
+
 		var templates=require('./templates/ebStandards.js'); templates=new templates();	
 		var builder=require('./assemblers/standards.js'); builder=new builder(sourceData.finishedObject, templates);
 		finishedOutputObject=builder.finalObject;
@@ -57,7 +60,7 @@ var loginFoundFunction=function(error, response, body){
 		else{
 		
 			console.log('starting conversion');
-			sourceData=new converter(fileName, 'firstLineIsHeader');
+			sourceData=new converter(fileName, dictionary.get('core'));
 			sourceData.on('gotData', conversionFunction);
 		}
 }

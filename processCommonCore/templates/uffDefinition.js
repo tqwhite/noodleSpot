@@ -163,6 +163,8 @@ module.exports={
 				"Withdrawaltype"],
 			"maps":{
 					"expressbook":{
+						"StudentUniqueIdentifier":"LocalId",
+						"SectionNumber":"Rosmat.LocalId"
 						}
 				}
 		},
@@ -178,6 +180,8 @@ module.exports={
 				"LastName", "MiddleName", "FirstName"],
 			"maps":{
 					"expressbook":{
+						"StaffUniqueIdentifier":"LocalId",
+						"SectionNumber":"Rosmat.LocalId"
 						}
 				}
 		},

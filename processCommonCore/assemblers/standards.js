@@ -45,11 +45,13 @@ var moduleFunction = function(InObj, templates) {
 			
 			linkToParent = function(privateKey, foreignKey, destinationArgs) {
 
+
 				self.objectList.map(
 
 				function(item, inx, entire) {
 				
 					var invalidObject=function(item){
+qtools.dump({'\n\n===== item =====\n':item});
 						return item.Title=='1E340900-8F24-11E0-B7E9-55FE9CFF4B22'
 					}
 				
