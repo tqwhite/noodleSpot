@@ -1,8 +1,9 @@
 'use strict';
 var qtools=require('qtools'),
+	qtools=new qtools(module),
 	events = require('events'), 
 	util=require('util');
-
+;
 //START OF moduleFunction() ============================================================
 
 var moduleFunction=function(args){
@@ -30,22 +31,40 @@ var moduleFunction=function(args){
 				this.skipFirstLine=false;
 			}
 
+
+
+
 		this.get=function(definitionName){
-			self.definitions[definitionName].targetMap=self.definitions[definitionName].maps[this.target];
-		
-			if (typeof(self.definitions[definitionName].translation)!='undefined' && typeof(self.definitions[definitionName].translation[this.target])!='undefined'){
-			self.definitions[definitionName].targetTranslation=self.definitions[definitionName].translation[this.target];
-			}
-			else{
-				self.definitions[definitionName].targetTranslation={};
-			}
-			self.definitions[definitionName].sourceFieldList=qtools.clone(self.definitions[definitionName].fieldList);
+			var outObj={};
+	
+			var hoistedPropertyName='maps', destName='targetMap';
+				if (typeof(self.definitions[definitionName][hoistedPropertyName])!='undefined' && typeof(self.definitions[definitionName][hoistedPropertyName][this.target])!='undefined'){
+					outObj[destName]=self.definitions[definitionName][hoistedPropertyName][this.target];
+				}
+				else{ outObj[destName]={}; }
 			
-			if (self.firstLineOfFile){
-				self.definitions[definitionName].fieldList="firstLineOfFile"
-			}
-			var outObj=self.definitions[definitionName];
+			var hoistedPropertyName='assembler', destName='targetAssembler';
+				if (typeof(self.definitions[definitionName][hoistedPropertyName])!='undefined' && typeof(self.definitions[definitionName][hoistedPropertyName][this.target])!='undefined'){
+					outObj[destName]=self.definitions[definitionName][hoistedPropertyName][this.target];
+				}
+				else{ outObj[destName]={}; }
+			
+			var hoistedPropertyName='translation', destName='targetTranslation';
+				if (typeof(self.definitions[definitionName][hoistedPropertyName])!='undefined' && typeof(self.definitions[definitionName][hoistedPropertyName][this.target])!='undefined'){
+					outObj[destName]=self.definitions[definitionName][hoistedPropertyName][this.target];
+				}
+				else{ outObj[destName]={}; }
+			
+
+			outObj.getFieldNamesFrom=qtools.clone(self.definitions[definitionName].getFieldNamesFrom);
+			outObj.fieldList=qtools.clone(self.definitions[definitionName].fieldList);
+			outObj.sourceFieldList=qtools.clone(self.definitions[definitionName].fieldList);
+			
+			if (self.firstLineOfFile){ outObj.fieldList="firstLineOfFile" };
+			
 			outObj.skipFirstLine=self.skipFirstLine;
+			
+			
 			return outObj;
 		}
 		this.forceEvent = forceEvent;

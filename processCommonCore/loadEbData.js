@@ -1,47 +1,51 @@
 "use strict";
-var qtools = require('qtools');
+var qtools = require('qtools'); qtools=new qtools(module);
+
+console.dir(qtools);
+
 /*
 
-node loadEbData.js --teacher --forReal -- dataFiles/eb/teacher.eb
-node loadEbData.js --teacher --forReal -- dataFiles/uff/teacher.uff
+node loadEbData.js --objective --verbose dataFiles/eb/objectives.eb
 
 EB SEQUENCE
-node loadEbData.js --school --forReal -- dataFiles/eb/schoolSetup/school.eb
-node loadEbData.js --gradeLevel --forReal dataFiles/eb/schoolSetup/gradeLevel.eb
-node loadEbData.js --gradeLevelSchool --forReal dataFiles/eb/schoolSetup/gradeLevelSchool.eb
-node loadEbData.js --term --forReal -- dataFiles/eb/schoolSetup/term.eb
-node loadEbData.js --termSchool --forReal -- dataFiles/eb/schoolSetup/termSchool.eb
-node loadEbData.js --schoolSetCurrentTerm --forReal -- dataFiles/eb/schoolSetup/school.eb
+node loadEbData.js --school --forReal  --verbose dataFiles/eb/schoolSetup/school.eb
+node loadEbData.js --gradeLevel --forReal  --verbose dataFiles/eb/schoolSetup/gradeLevel.eb
+node loadEbData.js --gradeLevelSchool --forReal  --verbose dataFiles/eb/schoolSetup/gradeLevelSchool.eb
+node loadEbData.js --term --forReal  --verbose -- dataFiles/eb/schoolSetup/term.eb
+node loadEbData.js --termSchool --forReal  --verbose -- dataFiles/eb/schoolSetup/termSchool.eb
+node loadEbData.js --schoolSetCurrentTerm --forReal  --verbose -- dataFiles/eb/schoolSetup/school.eb
 
-node loadEbData.js --student --forReal -- dataFiles/eb/peopleSetup/student.eb
-node loadEbData.js --teacher --forReal -- dataFiles/eb/peopleSetup/teacher.eb
+node loadEbData.js --student --forReal  --verbose -- dataFiles/eb/peopleSetup/student.eb
+node loadEbData.js --teacher --forReal  --verbose -- dataFiles/eb/peopleSetup/teacher.eb
 
 
-node loadEbData.js --homeroom --skipFirstLine --forReal -- dataFiles/eb/peopleSetup/homeroom.eb
-node loadEbData.js --studentAssignment --forReal dataFiles/eb/studentAssignment.eb
+node loadEbData.js --homeroom --skipFirstLine --forReal  --verbose -- dataFiles/eb/peopleSetup/homeroom.eb
+node loadEbData.js --studentAssignment --forReal  --verbose dataFiles/eb/studentAssignment.eb
 
-node loadEbData.js --teacherAssignment --forReal dataFiles/eb/teacherAssignment.eb
+node loadEbData.js --teacherAssignment --forReal  --verbose dataFiles/eb/teacherAssignment.eb
 
 UFF SEQUENCE
-node loadEbData.js --school --skipFirstLine --forReal dataFiles/uff/schoolSetup/school.uff
-node loadEbData.js --term --skipFirstLine --forReal dataFiles/uff/schoolSetup/term.uff
-node loadEbData.js --schoolSetCurrentTerm --forReal -- dataFiles/uff/schoolSetup/schoolSetCurrentTerm.uff
-node loadEbData.js --gradeLevel --skipFirstLine --forReal dataFiles/uff/schoolSetup/gradeLevel.uff
+node loadEbData.js --school --skipFirstLine --forReal  --verbose dataFiles/uff/schoolSetup/school.uff
+node loadEbData.js --term --skipFirstLine --forReal  --verbose dataFiles/uff/schoolSetup/term.uff
+node loadEbData.js --schoolSetCurrentTerm --forReal  --verbose -- dataFiles/uff/schoolSetup/schoolSetCurrentTerm.uff
+node loadEbData.js --gradeLevel --skipFirstLine --forReal  --verbose dataFiles/uff/schoolSetup/gradeLevel.uff
 
-node loadEbData.js --student --skipFirstLine --forReal dataFiles/uff/peopleSetup/student.uff
-node loadEbData.js --teacher --skipFirstLine --forReal -- dataFiles/uff/peopleSetup/teacher.uff
+node loadEbData.js --student --skipFirstLine --forReal  --verbose dataFiles/uff/peopleSetup/student.uff
+node loadEbData.js --teacher --skipFirstLine --forReal  --verbose -- dataFiles/uff/peopleSetup/teacher.uff
 
 
-node loadEbData.js --homeroom --skipFirstLine --forReal -- dataFiles/uff/peopleSetup/homeroom.uff
-node loadEbData.js --studentAssignment --skipFirstLine --forReal dataFiles/uff/studentAssignment.uff
+node loadEbData.js --homeroom --skipFirstLine --forReal  --verbose -- dataFiles/uff/peopleSetup/homeroom.uff
+node loadEbData.js --studentAssignment --skipFirstLine --forReal  --verbose dataFiles/uff/studentAssignment.uff
 
-node loadEbData.js --teacherAssignment --skipFirstLine --forReal dataFiles/uff/teacherAssignment.uff
+node loadEbData.js --teacherAssignment --skipFirstLine --forReal  --verbose dataFiles/uff/teacherAssignment.uff
 
 
 */
 
 var program = require('commander');
 program.version('tqTest')
+	.option('-y, --objective', 'upload objectives')
+	
 	.option('-y, --school', 'upload schools')
 	.option('-y, --gradeLevel', 'upload grade levels')
 	.option('-y, --gradeLevelSchool', 'upload gradeLevelSchool')
@@ -208,6 +212,16 @@ if (program.school) {
 
 	} 
 
+	else if (program.objective) {
+		var controlObj={
+			accessModelMethodName:'saveCompletedObject',
+			apiEndpoint:'/data/Api1/Objective',
+			endPointWrapperName:'Objectives',
+			definitionName:'objective',
+			fileName:fileName
+			};
+	}
+
 else{
 	console.log('\n\n=== you need to choose something to upload ===');
 	program.outputHelp();
@@ -224,6 +238,8 @@ var conversionFunction = function() {
 		sourceData.mapFieldNames();
 		sourceData.processLines();
 		sourceData.convert();
+		qtools.message='loadEb';
+		sourceData.assemble();
 		
 		if (typeof(finishedOutputObject)=='undefined'){
 			finishedOutputObject={};
@@ -245,10 +261,14 @@ var conversionFunction = function() {
 var loginFoundCallback = function(error, response, body) {
 
 		if (error) {
-			console.log('\n\n\n=======================================================\n');
-			console.log('LOGIN ERROR =' + error + '\n');
+			console.log('\n\n\n=============== LOGIN ERROR ===========================\n');
+			console.log(error);
+			console.log('\n===================================================\n');
+			qtools.die();
 		} else {
+		
 			if (program.verbose){console.log('\n\nstarting conversion\n\n');}
+			
 			sourceData = new converter(fileName, dictionary.get(controlObj.definitionName));
 			sourceData.on('gotData', conversionFunction);
 		}

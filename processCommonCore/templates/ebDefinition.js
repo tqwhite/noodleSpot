@@ -10,7 +10,12 @@ var gradeLevelFieldList=["LocalId", 	"Title", 	"AbbrevTitle", 	"SequenceNum", 	"
 var studentFieldList=["RefId", "Version", "FirstName", "LastName", "FullName", "LocalId", "StateProvinceId", "ProjectedGraduationYear", "OnTimeGraduationYear", "GraduationDate", "Title1Specified", "PrimaryRosmat.RefId", "GradeLevel.RefId"];
 var teacherFieldList=["RefId", "Version", "UserName", "Password", "LDAP", "LastLogin", "LoginAttempts", "Active", "LocalId", "FirstName", "LastName", "MiddleName", "PreferredName", "PhoneNumber", "IgnoreImport"]; 
 
-
+var objectiveAssembler=require('../assemblers/nestedJson.js');
+	objectiveAssembler=new objectiveAssembler({
+						"linkPropertyName":"Parent",
+						"destPropertyObjectName":"PropertyName",
+						"destPropertyObjectPropertyName":""
+					});
 
 module.exports={
 	
@@ -18,6 +23,23 @@ module.exports={
 //ALSO: translations are executed *after* maps are set. Their format is: "targetJsonPropertyName": function
 		//Translations are 1) the only way to use a source field twice, and
 		//2) the only way to *create* a field that does not map to a source field
+
+		
+	"objective"://create UserInfo, standalone
+		{
+			"schemaName":"UserBase",
+			"getFieldNamesFrom":'firstLineOfFile',
+			"fieldList":[],
+			"maps":{
+				"expressbook":{}
+			},
+			"translation":{
+				"expressbook":{}
+			},
+			"assembler":{
+				"expressbook":objectiveAssembler
+			}
+		},
 
 		
 	"teacher"://create UserInfo, standalone

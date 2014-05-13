@@ -57,6 +57,7 @@ var qtools=require('qtools'),
 	
 //START OF moduleFunction() ============================================================
 var moduleFunction = function(fileName, definition) {
+
 		events.EventEmitter.call(this);
 		var self = this,
 			forceEvent = function(eventName, outData) {
@@ -255,13 +256,26 @@ var moduleFunction = function(fileName, definition) {
 			
 			},
 			
+			assemble=function(){
+			
+				var assemblerAction=qtools.getSurePath(this, 'definition.targetAssembler.action');
+				
+				self.rawObjectList=qtools.clone(self.finishedObject);
+				
+				if (typeof(assemblerAction)!='undefined'){
+					self.finishedObject=assemblerAction(self.finishedObject);
+				}
+				//else, no assembly required
+			
+			},
+			
 			writeLines=function(){
-console.log("WRITELINES");				
-// 				var list=self.outList;
-// 				for (var i=0, len=list.length; i<len; i++){
-// 					var element=list[i];
-// 					process.stdout.write(element);
-// 				}
+				console.log("WRITELINES APPEARS TO BE UNUSED");				
+				// 				var list=self.outList;
+				// 				for (var i=0, len=list.length; i<len; i++){
+				// 					var element=list[i];
+				// 					process.stdout.write(element);
+				// 				}
 			}
 
 		//INITIALIZE OBJECT ====================================
@@ -273,6 +287,7 @@ console.log("WRITELINES");
 		//BUILD RETURN OBJECT ====================================
 		this.processLines=processLines;
 		this.convert=convert;
+		this.assemble=assemble;
 		this.mapFieldNames=mapFieldNames;
 		this.writeLines=writeLines;
 		this.forceEvent = forceEvent;
