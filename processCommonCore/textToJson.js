@@ -51,6 +51,8 @@ You can access the results from these properties:
 	
 */
 var qtools=require('qtools'),
+	qtools=new qtools(module),
+	qtools=new qtools(module),
 	events = require('events'),
 	util = require('util'),
 	fs = require("fs");
