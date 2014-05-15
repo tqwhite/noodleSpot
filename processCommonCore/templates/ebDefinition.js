@@ -10,11 +10,25 @@ var gradeLevelFieldList=["LocalId", 	"Title", 	"AbbrevTitle", 	"SequenceNum", 	"
 var studentFieldList=["RefId", "Version", "FirstName", "LastName", "FullName", "LocalId", "StateProvinceId", "ProjectedGraduationYear", "OnTimeGraduationYear", "GraduationDate", "Title1Specified", "PrimaryRosmat.RefId", "GradeLevel.RefId"];
 var teacherFieldList=["RefId", "Version", "UserName", "Password", "LDAP", "LastLogin", "LoginAttempts", "Active", "LocalId", "FirstName", "LastName", "MiddleName", "PreferredName", "PhoneNumber", "IgnoreImport"]; 
 
+
+
+var editFinalObjectives=function(inObjList){
+	var outList=[];
+	
+	for (var i=0, len=inObjList.length; i<len; i++){
+		var element=inObjList[i];
+		element.Standards=element.Components; //rename only for the top level
+		delete element.Components;
+		outList.push(element);
+	}
+	return outList;
+}
 var objectiveAssembler=require('../assemblers/nestedJson.js');
 	objectiveAssembler=new objectiveAssembler({
-						"linkPropertyName":"Parent",
-						"destPropertyObjectName":"PropertyName",
-						"destPropertyObjectPropertyName":""
+						"linkPropertyContainerName":"Parent",
+						"attachmentListPropertySpec":"$type",
+						"destPropertyObjectPropertyName":"",
+						"finalObjectCustomEditor":editFinalObjectives
 					});
 
 module.exports={
@@ -34,7 +48,17 @@ module.exports={
 				"expressbook":{}
 			},
 			"translation":{
-				"expressbook":{}
+				"expressbook":{
+					"$type":function(itemObj, sourceItem){
+						if (sourceItem['$type']=='Standards'){
+							return 'Components'; //unfriendly property name demanded by server
+						}
+						else{
+							return sourceItem['$type'];
+						}
+					}
+					
+				}
 			},
 			"assembler":{
 				"expressbook":objectiveAssembler

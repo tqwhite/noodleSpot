@@ -1,9 +1,9 @@
 "use strict";
 var qtools = require('qtools'); qtools=new qtools(module);
 
-console.dir(qtools);
-
 /*
+
+node loadEbData.js --objective --verbose --forReal dataFiles/eb/objectives.eb
 
 node loadEbData.js --objective --verbose dataFiles/eb/objectives.eb
 
@@ -65,11 +65,13 @@ program.version('tqTest')
 	.option('-R, --forReal', 'for [R]eal')
 	.option('-j, --dumpJson', 'dump json')
 	.option('-v, --verbose', 'Verbose')
+	.option('-v, --pingOnly', 'Verbose')
 	.option('-q, --quiet', 'Quiet, no messages')
 	.parse(process.argv);
 
 
 var ebAccess = require('./expressbookAccess.js');
+	ebAccess=new ebAccess();
 var converter = require('./textToJson.js'),
 	fileName = process.argv[process.argv.length - 1], //"coreOrig.txt"
 	fileType=fileName.match(/\.(\w*)$/)[1],
@@ -89,7 +91,7 @@ var converter = require('./textToJson.js'),
 if (program.school) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/School',
+			apiEndpoint:'/data/API/1/School',
 			endPointWrapperName:'SchoolInfo',
 			definitionName:'school',
 			fileName:fileName
@@ -99,7 +101,7 @@ if (program.school) {
 	else if (program.gradeLevel) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/Grade',
+			apiEndpoint:'/data/API/1/School/Grade',
 			endPointWrapperName:'Grades',
 			definitionName:'gradeLevel',
 			fileName:fileName
@@ -109,7 +111,7 @@ if (program.school) {
 	else if (program.gradeLevelSchool) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/Grade',
+			apiEndpoint:'/data/API/1/School/Grade',
 			endPointWrapperName:'Grades',
 			definitionName:'gradeLevelSchool',
 			fileName:fileName
@@ -119,7 +121,7 @@ if (program.school) {
 	else if (program.term) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/Termm',
+			apiEndpoint:'/data/API/1/School/Termm',
 			endPointWrapperName:'Terms',
 			definitionName:'term',
 			fileName:fileName
@@ -129,7 +131,7 @@ if (program.school) {
 	else if (program.termSchool) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/Termm',
+			apiEndpoint:'/data/API/1/School/Termm',
 			endPointWrapperName:'Terms',
 			definitionName:'termSchool',
 			fileName:fileName
@@ -139,7 +141,7 @@ if (program.school) {
 	else if (program.schoolSetCurrentTerm) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/School',
+			apiEndpoint:'/data/API/1/School',
 			endPointWrapperName:'SchoolInfo',
 			definitionName:'schoolSetCurrentTerm',
 			fileName:fileName
@@ -150,7 +152,7 @@ if (program.school) {
 	else if (program.teacher) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/Teacher',
+			apiEndpoint:'/data/API/1/Teacher',
 			endPointWrapperName:'UserInfo',
 			definitionName:'teacher',
 			fileName:fileName
@@ -161,7 +163,7 @@ if (program.school) {
 	else if (program.student) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/Student',
+			apiEndpoint:'/data/API/1/Student',
 			endPointWrapperName:'StudentPersonal',
 			definitionName:'student',
 			fileName:fileName
@@ -172,7 +174,7 @@ if (program.school) {
 	else if (program.homeroom) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/Homeroom',
+			apiEndpoint:'/data/API/1/Gradebook/Homeroom',
 			endPointWrapperName:'Homerooms',
 			definitionName:'homeroom',
 			fileName:fileName
@@ -182,7 +184,7 @@ if (program.school) {
 	else if (program.teacherAssignment) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/AssignTeachers',
+			apiEndpoint:'/data/API/1/Teacher/AssignTeachers',
 			endPointWrapperName:'assignmentPairs',
 			definitionName:'teacherAssignment',
 			fileName:fileName
@@ -194,7 +196,7 @@ if (program.school) {
 	else if (program.studentAssignment) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/AssignStudents',
+			apiEndpoint:'/data/API/1/Student/AssignStudents',
 			endPointWrapperName:'assignmentPairs',
 			definitionName:'studentAssignment',
 			fileName:fileName
@@ -215,7 +217,7 @@ if (program.school) {
 	else if (program.objective) {
 		var controlObj={
 			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Api1/Objective',
+			apiEndpoint:'/data/API/1/Objective',
 			endPointWrapperName:'Objectives',
 			definitionName:'objective',
 			fileName:fileName
@@ -238,8 +240,8 @@ var conversionFunction = function() {
 		sourceData.mapFieldNames();
 		sourceData.processLines();
 		sourceData.convert();
-		qtools.message='loadEb';
 		sourceData.assemble();
+
 		
 		if (typeof(finishedOutputObject)=='undefined'){
 			finishedOutputObject={};
@@ -255,9 +257,13 @@ var conversionFunction = function() {
 			console.log('\n\nstarting api write');
 			wrapupCallback=ebAccess.writeResultMessages;
 		}
+		if (program.dumpJson){
+			console.log('\n\n'+JSON.stringify(finishedOutputObject)+'\n\n');
+		}	
 		ebAccess[controlObj.accessModelMethodName](finishedOutputObject, controlObj.apiEndpoint, wrapupCallback);
 
 	}
+
 var loginFoundCallback = function(error, response, body) {
 
 		if (error) {
@@ -267,19 +273,28 @@ var loginFoundCallback = function(error, response, body) {
 			qtools.die();
 		} else {
 		
+			if (program.pingOnly){
+				ebAccess.pingApiEndpoint(controlObj);
+				return;
+			}
+			
+			
 			if (program.verbose){console.log('\n\nstarting conversion\n\n');}
+
+
+
 			
 			sourceData = new converter(fileName, dictionary.get(controlObj.definitionName));
 			sourceData.on('gotData', conversionFunction);
 		}
 	}
 
-ebAccess = new ebAccess({
+ebAccess.start({
 	baseUrl: 'http://expressbook.local',
 	userId: 'coordinator',
 	password: 'test',
 	loginCallback: loginFoundCallback,
 
-	dryRun: !program.forReal,
+	dryRun: (!program.forReal && !program.pingOnly),
 	dumpJson: program.dumpJson
 });

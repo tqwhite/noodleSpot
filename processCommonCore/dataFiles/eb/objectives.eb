@@ -1,11 +1,14 @@
-PropertyName	LocalId	Parent.LocalId	Title	Abbreviation	Description	SeqNum
-realm	apitest1		API Test 1	API 1	API One	1
-standard	read	apitest1	Reading	Read	Learn to Read	1
-activity	read1	read	Read First Part	Read 1	Read One	1
-activity	read2	read	Read Second	Read 2	Read Two	2
-standard	math	apitest1	Math	Math	see numbers	2
-activity	math1	math	Math First	Math 1	Math One	1
-activity	math2	math	Math Second	Math 2	Math Two	2
-standard	art	apitest1	Art	Art	see colors	3
-activity	art1	art	Art First	Art 1	Art One	1
-activity	art2	art	Art Second	Art 2	Art Two	2
+$type	LocalId	Parent.LocalId	Title	Abbreviation	Description	SeqNum
+Realm	apirealm1		API Realm 1	API 1	API One	1
+Standards	read	apirealm1	Reading	Read	Learn to Read	1
+Activities	read1	read	Read First Part	Read 1	Read One	1
+Activities	read2	read	Read Second	Read 2	Read Two	2
+Standards	math	apirealm1	Math	Math	see numbers	2
+Activities	math1	math	Math First	Math 1	Math One	1
+Activities	math2	math	Math Second	Math 2	Math Two	2
+Standards	art	apirealm1	Art	Art	see colors	3
+Activities	art1	art	Art First	Art 1	Art One	1
+Activities	art2	art	Art Second	Art 2	Art Two	2
+Realm	apirealm2		API Realm 2	API 2	API Two	2
+Standards	history	apirealm2	History	Hist	Learn History	1
+Activities	civilWar	history	Civil War	civil war	Learn Civil War	1

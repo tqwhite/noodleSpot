@@ -1,7 +1,6 @@
 'use strict';
 var qtools=require('qtools'),
 	qtools=new qtools(module),
-	qtools=new qtools(module),
 	events = require('events'),
 	util = require('util');
 

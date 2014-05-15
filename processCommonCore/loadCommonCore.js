@@ -1,6 +1,7 @@
 "use strict";
 var qtools=require('qtools');
-
+	qtools=new qtools(module);
+	
 //node loadCommonCore.js --standards dataFiles/commonCore/coreOrig.txt
 //node loadCommonCore.js --standards --forReal dataFiles/commonCore/coreOrig.txt
 
@@ -46,6 +47,9 @@ if (program.standards){
 		var templates=require('./templates/ebStandards.js'); templates=new templates();	
 		var builder=require('./assemblers/standards.js'); builder=new builder(sourceData.finishedObject, templates);
 		finishedOutputObject=builder.finalObject;
+		if (program.dumpJson){
+			console.log('\n\n'+JSON.stringify(finishedOutputObject)+'\n\n');
+		}
 		ebAccess[accessModelMethodName](finishedOutputObject, apiEndpoint, ebAccess.writeResultMessages);
 
 	};

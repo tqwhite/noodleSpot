@@ -1,7 +1,6 @@
 'use strict';
 var qtools=require('qtools'),
 	qtools=new qtools(module),
-	qtools=new qtools(module),
 	events = require('events'), 
 	util=require('util'),
 	qs=require('qs'),
@@ -9,7 +8,7 @@ var qtools=require('qtools'),
 
 //START OF moduleFunction() ============================================================
 
-var moduleFunction=function(args){
+var moduleFunction=function(){
 	events.EventEmitter.call(this);
 	var self = this,
 
@@ -83,10 +82,9 @@ var moduleFunction=function(args){
 		if (self.dryRun){
 			console.log('\n\n\n=======================================================\n');
 			console.log('payload length='+wrappedPayload.postData.length+'');
-			if (self.dumpJson){console.log(JSON.stringify(self.payload));}
 			console.log('\n==============  NOT WRITING TO EB (add --forReal )  ======================\n'); return;
 		}
-		
+	
 		self.request.post({
 			headers:{
 				'Content-Type' : 'application/x-www-form-urlencoded'
@@ -105,13 +103,6 @@ var moduleFunction=function(args){
 				}
 			});
 	
-	},
-
-	init=function(args){
-		self.dryRun=args.dryRun||false;
-		self.dumpJson=args.dumpJson||false;
-		self.baseUrl=args.baseUrl;
-		login(args.userId, args.password, args.loginCallback);
 	},
 	
 	extractEbErrorStatus=function(response){
@@ -132,6 +123,12 @@ var moduleFunction=function(args){
 
 //BUILD RETURN OBJECT ====================================
 
+	this.start=function(args){
+		self.dryRun=args.dryRun||false;
+		self.baseUrl=args.baseUrl;
+		login(args.userId, args.password, args.loginCallback);
+	};
+	
 	this.document=function(item){
 			if (!self.transcript){self.transcript=[];}
 			self.transcript.push(item);
@@ -144,7 +141,7 @@ var moduleFunction=function(args){
 			var element=list[i];
 
 			var data=saveObj.wrapperFunction(element);
-
+qtools.displayJson(data);
 			executePost(destPath, data, callback);
 		}
 		
@@ -169,9 +166,13 @@ var moduleFunction=function(args){
 		
 	}
 	
-	this.pingApiEndpoint=function(destPath){
-		
-			executePost(destPath, {hello:'goodbye'}, self.writeResultMessages);
+	this.pingApiEndpoint=function(controlObj){
+			var pingCallback=function(response){
+				self.writeResultMessages(response);
+				qtools.die();
+			}
+
+			executePost(controlObj.apiEndpoint, {ping:'expressbookAccess.js sent me'}, pingCallback);
 	}
 	
 	this.writeResultMessages=function(response){
@@ -181,10 +182,7 @@ var moduleFunction=function(args){
 		var outString='';
 		
 		var time=new Date();
-		if (self.dumpJson){
-			outString+='\n\n\n=======================================================\n'+time+'/n/n';
-			outString+=JSON.stringify(self.payload);
-		}
+
 		outString+='\n\n\n=======================================================\n'+time+'/n';
 		outString+='\nresponse.statusCode='+response.statusCode;
 		outString+='\nresponse.statusMessage='+response.statusMessage;
@@ -202,9 +200,8 @@ var moduleFunction=function(args){
 
 //INITIALIZE OBJECT ====================================
 
-	this.args=args;
-	this.request=request.defaults({jar: true})
-	init(this.args);
+
+	this.request=request.defaults({jar: true});
 
 	return this;
 	};

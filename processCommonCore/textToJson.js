@@ -52,7 +52,6 @@ You can access the results from these properties:
 */
 var qtools=require('qtools'),
 	qtools=new qtools(module),
-	qtools=new qtools(module),
 	events = require('events'),
 	util = require('util'),
 	fs = require("fs");
@@ -260,14 +259,17 @@ var moduleFunction = function(fileName, definition) {
 			
 			assemble=function(){
 			
-				var assemblerAction=qtools.getSurePath(this, 'definition.targetAssembler.action');
-				
+				var assemblerAction=qtools.getSurePath(self, 'definition.targetAssembler.executeAssembling');
 				self.rawObjectList=qtools.clone(self.finishedObject);
-				
+
+
 				if (typeof(assemblerAction)!='undefined'){
 					self.finishedObject=assemblerAction(self.finishedObject);
 				}
-				//else, no assembly required
+				else if (qtools.isNotEmpty(definition.targetAssembler)){
+					qtools.die({msg:"definition.targetAssembler has no executeAssembling method", definition:self.definition});
+				}
+				//else, no assembler and it's not missing from the data structure, so, no assembly required
 			
 			},
 			
