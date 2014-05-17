@@ -1,11 +1,15 @@
 "use strict";
-var qtools = require('qtools'); qtools=new qtools(module);
+var qtools = require('qtools');
+qtools = new qtools(module);
 
 /*
 
 node loadEbData.js --objective --verbose --forReal dataFiles/eb/objectives.eb
-
 node loadEbData.js --objective --verbose dataFiles/eb/objectives.eb
+
+node loadEbData.js --assignGradeLevel --verbose --forReal dataFiles/eb/gradeLevelAssignments.eb
+
+node loadEbData.js --assignGradeLevel --verbose dataFiles/eb/gradeLevelAssignments.eb
 
 EB SEQUENCE
 node loadEbData.js --school --forReal  --verbose dataFiles/eb/schoolSetup/school.eb
@@ -45,22 +49,23 @@ node loadEbData.js --teacherAssignment --skipFirstLine --forReal  --verbose data
 var program = require('commander');
 program.version('tqTest')
 	.option('-y, --objective', 'upload objectives')
-	
+	.option('-y, --assignGradeLevel', 'upload assignGradeLevel')
+
 	.option('-y, --school', 'upload schools')
 	.option('-y, --gradeLevel', 'upload grade levels')
 	.option('-y, --gradeLevelSchool', 'upload gradeLevelSchool')
 	.option('-y, --term', 'upload terms')
 	.option('-y, --termSchool', 'upload termSchool')
 	.option('-y, --schoolSetCurrentTerm', 'upload schoolSetCurrentTerm')
-	
+
 	.option('-y, --student', 'upload students')
 	.option('-y, --teacher', 'upload teachers')
-	
+
 	.option('-y, --homeroom', 'create a new homeroom for later student attaching')
-	
+
 	.option('-y, --studentAssignment', 'attach students to rosmats')
 	.option('-y, --teacherAssignment', 'attach teachers to rosmats')
-	
+
 	.option('-f, --skipFirstLine', 'Skip first line if header definitions are there for a schema that does not use it')
 	.option('-R, --forReal', 'for [R]eal')
 	.option('-j, --dumpJson', 'dump json')
@@ -71,223 +76,218 @@ program.version('tqTest')
 
 
 var ebAccess = require('./expressbookAccess.js');
-	ebAccess=new ebAccess();
+ebAccess = new ebAccess();
 var converter = require('./textToJson.js'),
 	fileName = process.argv[process.argv.length - 1], //"coreOrig.txt"
-	fileType=fileName.match(/\.(\w*)$/)[1],
+	fileType = fileName.match(/\.(\w*)$/)[1],
 	finishedOutputObject,
 	sourceData;
 
-	switch(fileType){
-		case 'eb':
-			var dictionaryName='ebDefinition'
-			break;
-		case 'uff':
-			var dictionaryName='uffDefinition'
-			break;
-	}
-	var dictionary = require('./templates/dictionary.js'); dictionary=new dictionary({dictionaryName:dictionaryName, target:'expressbook', skipFirstLine:program.skipFirstLine});
+switch (fileType) {
+	case 'eb':
+		var dictionaryName = 'ebDefinition'
+		break;
+	case 'uff':
+		var dictionaryName = 'uffDefinition'
+		break;
+}
+var dictionary = require('./templates/dictionary.js');
+dictionary = new dictionary({
+	dictionaryName: dictionaryName,
+	target: 'expressbook',
+	skipFirstLine: program.skipFirstLine
+});
 
 if (program.school) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/School',
-			endPointWrapperName:'SchoolInfo',
-			definitionName:'school',
-			fileName:fileName
-			};
-	}
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/School',
+		endPointWrapperName: 'SchoolInfo',
+		definitionName: 'school',
+		fileName: fileName
+	};
+} else if (program.gradeLevel) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/School/Grade',
+		endPointWrapperName: 'Grades',
+		definitionName: 'gradeLevel',
+		fileName: fileName
+	};
+} else if (program.gradeLevelSchool) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/School/Grade',
+		endPointWrapperName: 'Grades',
+		definitionName: 'gradeLevelSchool',
+		fileName: fileName
+	};
+} else if (program.term) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/School/Termm',
+		endPointWrapperName: 'Terms',
+		definitionName: 'term',
+		fileName: fileName
+	};
+} else if (program.termSchool) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/School/Termm',
+		endPointWrapperName: 'Terms',
+		definitionName: 'termSchool',
+		fileName: fileName
+	};
+} else if (program.schoolSetCurrentTerm) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/School',
+		endPointWrapperName: 'SchoolInfo',
+		definitionName: 'schoolSetCurrentTerm',
+		fileName: fileName
+	};
+} else if (program.teacher) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/Teacher',
+		endPointWrapperName: 'UserInfo',
+		definitionName: 'teacher',
+		fileName: fileName
+	};
 
-	else if (program.gradeLevel) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/School/Grade',
-			endPointWrapperName:'Grades',
-			definitionName:'gradeLevel',
-			fileName:fileName
-			};
-	}
-
-	else if (program.gradeLevelSchool) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/School/Grade',
-			endPointWrapperName:'Grades',
-			definitionName:'gradeLevelSchool',
-			fileName:fileName
-			};
-	}
-
-	else if (program.term) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/School/Termm',
-			endPointWrapperName:'Terms',
-			definitionName:'term',
-			fileName:fileName
-			};
-	}
-
-	else if (program.termSchool) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/School/Termm',
-			endPointWrapperName:'Terms',
-			definitionName:'termSchool',
-			fileName:fileName
-			};
-	}
-	
-	else if (program.schoolSetCurrentTerm) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/School',
-			endPointWrapperName:'SchoolInfo',
-			definitionName:'schoolSetCurrentTerm',
-			fileName:fileName
-			};
-	}
-	
-
-	else if (program.teacher) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/Teacher',
-			endPointWrapperName:'UserInfo',
-			definitionName:'teacher',
-			fileName:fileName
-			};
-
-	} 
-
-	else if (program.student) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/Student',
-			endPointWrapperName:'StudentPersonal',
-			definitionName:'student',
-			fileName:fileName
-			};
-	} 
-	
-
-	else if (program.homeroom) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/Gradebook/Homeroom',
-			endPointWrapperName:'Homerooms',
-			definitionName:'homeroom',
-			fileName:fileName
-			};
-	}
-
-	else if (program.teacherAssignment) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/Teacher/AssignTeachers',
-			endPointWrapperName:'assignmentPairs',
-			definitionName:'teacherAssignment',
-			fileName:fileName
-			};
+} else if (program.student) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/Student',
+		endPointWrapperName: 'StudentPersonal',
+		definitionName: 'student',
+		fileName: fileName
+	};
+} else if (program.homeroom) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/Gradebook/Homeroom',
+		endPointWrapperName: 'Homerooms',
+		definitionName: 'homeroom',
+		fileName: fileName
+	};
+} else if (program.teacherAssignment) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/Teacher/AssignTeachers',
+		endPointWrapperName: 'assignmentPairs',
+		definitionName: 'teacherAssignment',
+		fileName: fileName
+	};
 
 
-	}  
+} else if (program.studentAssignment) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/Student/AssignStudents',
+		endPointWrapperName: 'assignmentPairs',
+		definitionName: 'studentAssignment',
+		fileName: fileName
+	};
+} else if (program.studentAssignment_Nested_ROSMATVERSIONWORKS) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/Rosmat/attachStudents1',
+		endPointWrapperName: 'assignmentPairs',
+		definitionName: 'DSDFDSFSDFSDFDF',
+		fileName: fileName
+	};
 
-	else if (program.studentAssignment) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/Student/AssignStudents',
-			endPointWrapperName:'assignmentPairs',
-			definitionName:'studentAssignment',
-			fileName:fileName
-			};
-	}
-
-	else if (program.studentAssignment_Nested_ROSMATVERSIONWORKS) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/Rosmat/attachStudents1',
-			endPointWrapperName:'assignmentPairs',
-			definitionName:'DSDFDSFSDFSDFDF',
-			fileName:fileName
-			};
-
-	} 
-
-	else if (program.objective) {
-		var controlObj={
-			accessModelMethodName:'saveCompletedObject',
-			apiEndpoint:'/data/API/1/Objective',
-			endPointWrapperName:'Objectives',
-			definitionName:'objective',
-			fileName:fileName
-			};
-	}
-
-else{
+} else if (program.objective) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/Objective',
+		endPointWrapperName: 'Objectives',
+		definitionName: 'objective',
+		fileName: fileName
+	};
+} else if (program.assignGradeLevel) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/Objective/AssignGradeLevel',
+		endPointWrapperName: 'GradeLevelAssignments',
+		definitionName: 'assignGradeLevel',
+		fileName: fileName
+	};
+} else {
 	console.log('\n\n=== you need to choose something to upload ===');
 	program.outputHelp();
 	process.exit(1);
 }
-if (!program.quiet){ console.log("executing "+controlObj.definitionName); }
-if (program.verbose){
-	qtools.dump({'\n\n===== controlObj =====\n':controlObj});
+if (!program.quiet) {
+	console.log("executing " + controlObj.definitionName);
+}
+if (program.verbose) {
+	qtools.dump({
+		'\n\n===== controlObj =====\n': controlObj
+	});
 	console.log('\n\attempting login');
 }
 
 var conversionFunction = function() {
-		
-		sourceData.mapFieldNames();
-		sourceData.processLines();
-		sourceData.convert();
-		sourceData.assemble();
 
-		
-		if (typeof(finishedOutputObject)=='undefined'){
-			finishedOutputObject={};
-			finishedOutputObject[controlObj.endPointWrapperName]=sourceData.finishedObject; //very often, I find it useful to generate an object literal above for testing and don't want to have it overwritten here
-		}
-		
-		var wrapupCallback='no final output wanted';
-		
-		if (program.verbose){
-			qtools.dump({sourceObjectList:sourceData.sourceObjectList});
-			qtools.dump({finishedOutputObject:finishedOutputObject});
-	
-			console.log('\n\nstarting api write');
-			wrapupCallback=ebAccess.writeResultMessages;
-		}
-		if (program.dumpJson){
-			console.log('\n\n'+JSON.stringify(finishedOutputObject)+'\n\n');
-		}	
-		ebAccess[controlObj.accessModelMethodName](finishedOutputObject, controlObj.apiEndpoint, wrapupCallback);
+	sourceData.mapFieldNames();
+	sourceData.processLines();
+	sourceData.convert();
+	sourceData.assemble();
 
+
+	if (typeof (finishedOutputObject) == 'undefined') {
+		finishedOutputObject = {};
+		finishedOutputObject[controlObj.endPointWrapperName] = sourceData.finishedObject; //very often, I find it useful to generate an object literal above for testing and don't want to have it overwritten here
 	}
+
+	var wrapupCallback = 'no final output wanted';
+
+	if (program.verbose) {
+		qtools.dump({
+			sourceObjectList: sourceData.sourceObjectList
+		});
+		qtools.dump({
+			finishedOutputObject: finishedOutputObject
+		});
+
+		console.log('\n\nstarting api write');
+		wrapupCallback = ebAccess.writeResultMessages;
+	}
+	if (program.dumpJson) {
+		console.log('\n\n' + JSON.stringify(finishedOutputObject) + '\n\n');
+	}
+	ebAccess[controlObj.accessModelMethodName](finishedOutputObject, controlObj.apiEndpoint, wrapupCallback);
+
+}
 
 var loginFoundCallback = function(error, response, body) {
 
-		if (error) {
-			console.log('\n\n\n=============== LOGIN ERROR ===========================\n');
-			console.log(error);
-			console.log('\n===================================================\n');
-			qtools.die();
-		} else {
-		
-			if (program.pingOnly){
-				ebAccess.pingApiEndpoint(controlObj);
-				return;
-			}
-			
-			
-			if (program.verbose){console.log('\n\nstarting conversion\n\n');}
+	if (error) {
+		console.log('\n\n\n=============== LOGIN ERROR ===========================\n');
+		console.log(error);
+		console.log('\n===================================================\n');
+		qtools.die();
+	} else {
 
-
-
-			
-			sourceData = new converter(fileName, dictionary.get(controlObj.definitionName));
-			sourceData.on('gotData', conversionFunction);
+		if (program.pingOnly) {
+			ebAccess.pingApiEndpoint(controlObj);
+			return;
 		}
+
+
+		if (program.verbose) {
+			console.log('\n\nstarting conversion\n\n');
+		}
+
+
+
+
+		sourceData = new converter(fileName, dictionary.get(controlObj.definitionName));
+		sourceData.on('gotData', conversionFunction);
 	}
+}
 
 ebAccess.start({
 	baseUrl: 'http://expressbook.local',
@@ -295,6 +295,7 @@ ebAccess.start({
 	password: 'test',
 	loginCallback: loginFoundCallback,
 
-	dryRun: (!program.forReal && !program.pingOnly),
+	dryRun: ( !program.forReal && !program.pingOnly),
 	dumpJson: program.dumpJson
 });
+

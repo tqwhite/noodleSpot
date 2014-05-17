@@ -39,6 +39,23 @@ module.exports={
 		//2) the only way to *create* a field that does not map to a source field
 
 		
+	"assignGradeLevel"://create UserInfo, standalone
+		{
+			"schemaName":"assignGradeLevel",
+			"getFieldNamesFrom":'firstLineOfFile',
+			"fieldList":[],
+			"maps":{
+				"expressbook":{}
+			},
+			"translation":{
+				"expressbook":{}
+			},
+			"assembler":{
+				"expressbook":''
+			}
+		},
+
+		
 	"objective"://create UserInfo, standalone
 		{
 			"schemaName":"UserBase",
