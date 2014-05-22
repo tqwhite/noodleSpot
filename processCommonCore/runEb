@@ -61,14 +61,46 @@ node loadEbData.js --homeroom --skipFirstLine --forReal -- dataFiles/eb/peopleSe
 			exit 1;
 		fi
 
-node loadEbData.js --studentAssignment --forReal dataFiles/eb/studentAssignment.eb
+node loadEbData.js --studentAssignment --forReal dataFiles/eb/peopleSetup/studentAssignment.eb
 		if [ $? -eq 1 ]
 		then
 			echo "found error";
 			exit 1;
 		fi
 
-node loadEbData.js --teacherAssignment --forReal dataFiles/eb/teacherAssignment.eb
+node loadEbData.js --teacherAssignment --forReal dataFiles/eb/peopleSetup/teacherAssignment.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --objective  --forReal dataFiles/eb/objectiveSetup/objectives.eb
+
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --assignGradeLevel  --forReal dataFiles/eb/objectiveSetup/gradeLevelAssignments.eb
+
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --assignTerm  --forReal dataFiles/eb/objectiveSetup/termAssignments.eb
+
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --assignSpecialty  --forReal dataFiles/eb/objectiveSetup/specialtyAssignments.eb
+
 		if [ $? -eq 1 ]
 		then
 			echo "found error";

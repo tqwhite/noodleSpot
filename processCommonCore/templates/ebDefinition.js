@@ -1,4 +1,6 @@
 'use strict';
+var qtools = require('qtools');
+qtools = new qtools(module);
 
 var explodeCompoundRefId=function(item, inx, entire){
 qtools.dump({'\n\n===== entire =====\n':entire});
@@ -30,13 +32,48 @@ var objectiveAssembler=require('../assemblers/nestedJson.js');
 						"destPropertyObjectPropertyName":"",
 						"finalObjectCustomEditor":editFinalObjectives
 					});
-
+var inx=1000;
 module.exports={
 	
 //NOTE: maps property are "sourceFileFieldName":"targetJsonPropertyName". Empty map, {}, emits entire fieldlist.
 //ALSO: translations are executed *after* maps are set. Their format is: "targetJsonPropertyName": function
 		//Translations are 1) the only way to use a source field twice, and
 		//2) the only way to *create* a field that does not map to a source field
+//return '<!omitProperty!>'; will remove the property entirely
+
+		
+	"assignSpecialty"://create UserInfo, standalone
+		{
+			"schemaName":"assignSpecialty",
+			"getFieldNamesFrom":'firstLineOfFile',
+			"fieldList":[],
+			"maps":{
+				"expressbook":{}
+			},
+			"translation":{
+				"expressbook":{}
+			},
+			"assembler":{
+				"expressbook":''
+			}
+		},
+
+		
+	"assignTerm"://create UserInfo, standalone
+		{
+			"schemaName":"assignTerm",
+			"getFieldNamesFrom":'firstLineOfFile',
+			"fieldList":[],
+			"maps":{
+				"expressbook":{}
+			},
+			"translation":{
+				"expressbook":{}
+			},
+			"assembler":{
+				"expressbook":''
+			}
+		},
 
 		
 	"assignGradeLevel"://create UserInfo, standalone
@@ -65,6 +102,10 @@ module.exports={
 				"expressbook":{}
 			},
 			"translation":{
+			"Description":function(itemObj, sourceItem){
+				if (!sourceItem.Description){ return sourceItem.Title;}
+				else{ return sourceItem.Description;}
+			},
 				"expressbook":{
 					"$type":function(itemObj, sourceItem){
 						if (sourceItem['$type']=='Standards'){
@@ -73,7 +114,24 @@ module.exports={
 						else{
 							return sourceItem['$type'];
 						}
-					}
+					},
+					Parent:function(){return '<!omitProperty!>';},
+					
+ 					ParentStandard:function(){return {};}
+// 				,	Components:function(){return [];},
+//  				Activities:function(){return [];},
+//  				Applicability:function(){return [];},
+// 					CanDelete:function(){return true;},
+// 					CreateNew:function(){return true;},
+// 					ExportCode:function(){return '';},
+// 					IsDetailed:function(){return true;},
+// 					MarkScale:function(){return {};},
+// 					RefId:function(){return qtools.newGuid();},
+// 					SequenceNum:function(){return inx++;},
+// 					Specialties:function(){return [];},
+// 					SuppressDisplay:function(){return false;},
+// 					Terms:function(){return [];}
+					
 					
 				}
 			},

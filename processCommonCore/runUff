@@ -63,4 +63,37 @@ node loadEbData.js --teacherAssignment --skipFirstLine --forReal dataFiles/uff/t
 			exit 1;
 		fi
 
+node loadEbData.js --objective --forReal dataFiles/uff/objectiveSetup/objectives.eb
+
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --assignGradeLevel --forReal dataFiles/uff/objectiveSetup/gradeLevelAssignments.eb
+
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --assignTerm --forReal dataFiles/uff/objectiveSetup/termAssignments.eb
+
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --assignSpecialty --forReal dataFiles/uff/objectiveSetup/specialtyAssignments.eb
+
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+
 echo "UFF upload completed successfully"

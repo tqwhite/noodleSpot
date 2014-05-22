@@ -3,13 +3,11 @@ var qtools = require('qtools');
 qtools = new qtools(module);
 
 /*
+node loadEbData.js --objective --verbose --forReal dataFiles/uff/objectiveSetup/objectives.eb
+node loadEbData.js --assignGradeLevel --verbose --forReal dataFiles/uff/objectiveSetup/gradeLevelAssignments.eb
+node loadEbData.js --assignTerm --verbose --forReal dataFiles/uff/objectiveSetup/termAssignments.eb
+node loadEbData.js --assignSpecialty --verbose --forReal dataFiles/uff/objectiveSetup/specialtyAssignments.eb
 
-node loadEbData.js --objective --verbose --forReal dataFiles/eb/objectives.eb
-node loadEbData.js --objective --verbose dataFiles/eb/objectives.eb
-
-node loadEbData.js --assignGradeLevel --verbose --forReal dataFiles/eb/gradeLevelAssignments.eb
-
-node loadEbData.js --assignGradeLevel --verbose dataFiles/eb/gradeLevelAssignments.eb
 
 EB SEQUENCE
 node loadEbData.js --school --forReal  --verbose dataFiles/eb/schoolSetup/school.eb
@@ -24,9 +22,15 @@ node loadEbData.js --teacher --forReal  --verbose -- dataFiles/eb/peopleSetup/te
 
 
 node loadEbData.js --homeroom --skipFirstLine --forReal  --verbose -- dataFiles/eb/peopleSetup/homeroom.eb
-node loadEbData.js --studentAssignment --forReal  --verbose dataFiles/eb/studentAssignment.eb
+node loadEbData.js --studentAssignment --forReal  --verbose dataFiles/eb/peopleSetup/studentAssignment.eb
+ 
+ 
+node loadEbData.js --objective --verbose --forReal dataFiles/eb/objectiveSetup/objectives.eb
+node loadEbData.js --assignGradeLevel --verbose --forReal dataFiles/eb/objectiveSetup/gradeLevelAssignments.eb
+node loadEbData.js --assignTerm --verbose --forReal dataFiles/eb/objectiveSetup/termAssignments.eb
+node loadEbData.js --assignSpecialty --verbose --forReal dataFiles/eb/objectiveSetup/specialtyAssignments.eb
 
-node loadEbData.js --teacherAssignment --forReal  --verbose dataFiles/eb/teacherAssignment.eb
+node loadEbData.js --teacherAssignment --forReal  --verbose dataFiles/eb/peopleSetup/teacherAssignment.eb
 
 UFF SEQUENCE
 node loadEbData.js --school --skipFirstLine --forReal  --verbose dataFiles/uff/schoolSetup/school.uff
@@ -50,6 +54,8 @@ var program = require('commander');
 program.version('tqTest')
 	.option('-y, --objective', 'upload objectives')
 	.option('-y, --assignGradeLevel', 'upload assignGradeLevel')
+	.option('-y, --assignTerm', 'upload assignGradeLevel')
+	.option('-y, --assignSpecialty', 'upload assignSpecialty')
 
 	.option('-y, --school', 'upload schools')
 	.option('-y, --gradeLevel', 'upload grade levels')
@@ -212,6 +218,22 @@ if (program.school) {
 		apiEndpoint: '/data/API/1/Objective/AssignGradeLevel',
 		endPointWrapperName: 'GradeLevelAssignments',
 		definitionName: 'assignGradeLevel',
+		fileName: fileName
+	};
+} else if (program.assignTerm) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/Objective/AssignTerm',
+		endPointWrapperName: 'TermAssignments',
+		definitionName: 'assignTerm',
+		fileName: fileName
+	};
+} else if (program.assignSpecialty) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/Objective/AssignSpecialty',
+		endPointWrapperName: 'SpecialtyAssignments',
+		definitionName: 'assignSpecialty',
 		fileName: fileName
 	};
 } else {

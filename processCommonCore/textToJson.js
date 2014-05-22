@@ -184,6 +184,9 @@ var moduleFunction = function(fileName, definition) {
 						if(outValue!="<!omitProperty!>"){
 							itemObj[j]=outValue;
 						}
+						else{
+							delete itemObj[j];
+						}
 
 						
 					}

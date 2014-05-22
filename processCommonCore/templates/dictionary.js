@@ -56,7 +56,7 @@ var moduleFunction=function(args){
 				else{ outObj[destName]={}; }
 			
 
-			outObj.getFieldNamesFrom=qtools.clone(self.definitions[definitionName].getFieldNamesFrom);
+			outObj.getFieldNamesFrom=self.definitions[definitionName].getFieldNamesFrom;
 			outObj.fieldList=qtools.clone(self.definitions[definitionName].fieldList);
 			outObj.sourceFieldList=qtools.clone(self.definitions[definitionName].fieldList);
 			

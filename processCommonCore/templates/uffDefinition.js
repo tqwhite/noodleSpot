@@ -17,6 +17,7 @@ module.exports={
 //ALSO: translations are executed *after* maps are set. Their format is: "targetJsonPropertyName": function
 		//Translations are 1) the only way to use a source field twice, and
 		//2) the only way to *create* a field that does not map to a source field
+//return '<!omitProperty!>'; will remove the property entirely
 
 //[doc1] - MN SIS Extract Files - Unified_V9(In Progress)
 //[doc2] - Plans4.x Import File Formats
