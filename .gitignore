@@ -13,4 +13,4 @@ public/media/hash/*
 *.log
 
 dataExchange/dataFiles/uffSampleData
-processCommonCore/dataFiles/uffSampleData
+dataExchange/config/targetServer.js

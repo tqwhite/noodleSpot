@@ -311,13 +311,17 @@ var loginFoundCallback = function(error, response, body) {
 	}
 }
 
-ebAccess.start({
-	baseUrl: 'http://expressbook.local',
-	userId: 'coordinator',
-	password: 'test',
-	loginCallback: loginFoundCallback,
-
-	dryRun: ( !program.forReal && !program.pingOnly),
-	dumpJson: program.dumpJson
-});
+var config=require('./config/targetServer.js'); 
+config=new config();
+var loginInfo=config.loginInfo();
+ebAccess.start(
+	qtools.extend(
+		loginInfo, 
+		{
+			loginCallback: loginFoundCallback,
+			dryRun: ( !program.forReal && !program.pingOnly),
+			dumpJson: program.dumpJson
+		}
+	)
+);
 
