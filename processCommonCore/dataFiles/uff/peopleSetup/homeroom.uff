@@ -1,7 +1,0 @@
-DistrictCode	DistrictType	SchoolCode	SectionNumber	CourseNumber	TermAbbrev	SchoolYearBeg	SchoolYearEnd	Grade	BeginDate	EndDate	Location	HomeroomFlag	BegPeriodNum	EndPeriodNum	Credit	TeamCode	Track
-11	1	uffAleph	uffAlephG1	2DAR1	S1	2013	2014	uff1			B313	Y	3	3			
-11	1	uffAleph	uffAlephG2	2DAR1	S2	2013	2014	uff2			B313	Y	3	3			
-11	1	uffBeth	uffBethG1	3DAR1	S1	2013	2014	uff1			B313	Y	4	4			
-11	1	uffBeth	uffBethG2	3DAR1	S2	2013	2014	uff2			B313	Y	4	4			
-11	1	uffGimel	uffGimelG1	ACCTA	S2	2013	2014	uff1			MED	Y	5	5			
-11	1	uffGimel	uffGimelG2	ADV	YR	2013	2014	uff2			A113	Y	3	3			
