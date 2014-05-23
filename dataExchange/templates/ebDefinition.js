@@ -184,9 +184,9 @@ module.exports={
 				}
 		},
 
-	"studentAssignment"://"SectionStudent": //rosmat/attachStudents
+	"assignStudent"://"SectionStudent": //rosmat/attachStudents
 		{
-			"schemaName":"StudentAssignment",
+			"schemaName":"assignStudent",
 			"getFieldNamesFrom":'firstLineOfFile',
 			"fieldList":
 				["Rosmat.RefId", "LocalId", "RefId"],
@@ -195,9 +195,9 @@ module.exports={
 				}
 		},
 		
-	"teacherAssignment"://"SectionStaff": //rosmat/addTeachers
+	"assignTeacher"://"SectionStaff": //rosmat/addTeachers
 		{
-			"schemaName":"UserInfoAssignment",
+			"schemaName":"assignTeacher",
 			"getFieldNamesFrom":'firstLineOfFile',
 			"fieldList":
 				["Rosmat.RefId", "LocalId", "RefId"],

@@ -152,7 +152,7 @@ module.exports={
 			}
 		},
 
-	"studentAssignment"://[doc1-Student Enrollment File]
+	"assignStudent"://[doc1-Student Enrollment File]
 		{
 			"schemaName":"SectionStudent",
 			"fieldList":
@@ -170,7 +170,7 @@ module.exports={
 				}
 		},
 
-	"teacherAssignment"://[doc1-Section Staff File ]
+	"assignTeacher"://[doc1-Section Staff File ]
 		{
 			"schemaName":"SectionStaff",
 			"fieldList":

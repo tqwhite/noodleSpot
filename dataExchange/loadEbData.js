@@ -22,7 +22,7 @@ node loadEbData.js --teacher --forReal  --verbose -- dataFiles/eb/peopleSetup/te
 
 
 node loadEbData.js --homeroom --skipFirstLine --forReal  --verbose -- dataFiles/eb/peopleSetup/homeroom.eb
-node loadEbData.js --studentAssignment --forReal  --verbose dataFiles/eb/peopleSetup/studentAssignment.eb
+node loadEbData.js --assignStudent --forReal  --verbose dataFiles/eb/peopleSetup/assignStudent.eb
  
  
 node loadEbData.js --objective --verbose --forReal dataFiles/eb/objectiveSetup/objectives.eb
@@ -30,7 +30,8 @@ node loadEbData.js --assignGradeLevel --verbose --forReal dataFiles/eb/objective
 node loadEbData.js --assignTerm --verbose --forReal dataFiles/eb/objectiveSetup/termAssignments.eb
 node loadEbData.js --assignSpecialty --verbose --forReal dataFiles/eb/objectiveSetup/specialtyAssignments.eb
 
-node loadEbData.js --teacherAssignment --forReal  --verbose dataFiles/eb/peopleSetup/teacherAssignment.eb
+node loadEbData.js --assignTeacher --forReal  --verbose dataFiles/eb/peopleSetup/assignTeacher.eb
+
 
 UFF SEQUENCE
 node loadEbData.js --school --skipFirstLine --forReal  --verbose dataFiles/uff/schoolSetup/school.uff
@@ -43,9 +44,9 @@ node loadEbData.js --teacher --skipFirstLine --forReal  --verbose -- dataFiles/u
 
 
 node loadEbData.js --homeroom --skipFirstLine --forReal  --verbose -- dataFiles/uff/peopleSetup/homeroom.uff
-node loadEbData.js --studentAssignment --skipFirstLine --forReal  --verbose dataFiles/uff/studentAssignment.uff
+node loadEbData.js --assignStudent --skipFirstLine --forReal  --verbose dataFiles/uff/assignStudent.uff
 
-node loadEbData.js --teacherAssignment --skipFirstLine --forReal  --verbose dataFiles/uff/teacherAssignment.uff
+node loadEbData.js --assignTeacher --skipFirstLine --forReal  --verbose dataFiles/uff/assignTeacher.uff
 
 
 */
@@ -69,8 +70,8 @@ program.version('tqTest')
 
 	.option('-y, --homeroom', 'create a new homeroom for later student attaching')
 
-	.option('-y, --studentAssignment', 'attach students to rosmats')
-	.option('-y, --teacherAssignment', 'attach teachers to rosmats')
+	.option('-y, --assignStudent', 'attach students to rosmats')
+	.option('-y, --assignTeacher', 'attach teachers to rosmats')
 
 	.option('-f, --skipFirstLine', 'Skip first line if header definitions are there for a schema that does not use it')
 	.option('-R, --forReal', 'for [R]eal')
@@ -177,22 +178,22 @@ if (program.school) {
 		definitionName: 'homeroom',
 		fileName: fileName
 	};
-} else if (program.teacherAssignment) {
+} else if (program.assignTeacher) {
 	var controlObj = {
 		accessModelMethodName: 'saveCompletedObject',
 		apiEndpoint: '/data/API/1/Teacher/AssignTeachers',
 		endPointWrapperName: 'assignmentPairs',
-		definitionName: 'teacherAssignment',
+		definitionName: 'assignTeacher',
 		fileName: fileName
 	};
 
 
-} else if (program.studentAssignment) {
+} else if (program.assignStudent) {
 	var controlObj = {
 		accessModelMethodName: 'saveCompletedObject',
 		apiEndpoint: '/data/API/1/Student/AssignStudents',
 		endPointWrapperName: 'assignmentPairs',
-		definitionName: 'studentAssignment',
+		definitionName: 'assignStudent',
 		fileName: fileName
 	};
 } else if (program.studentAssignment_Nested_ROSMATVERSIONWORKS) {

@@ -18,7 +18,7 @@ echo "--teacher"; node loadEbData.js --teacher --pingOnly -- dataFiles/eb/people
 
 echo "--homeroom"; node loadEbData.js --homeroom --skipFirstLine --pingOnly -- dataFiles/eb/peopleSetup/homeroom.eb;
 
-echo "--studentAssignment"; node loadEbData.js --studentAssignment --pingOnly dataFiles/eb/studentAssignment.eb;
+echo "--assignStudent"; node loadEbData.js --assignStudent --pingOnly dataFiles/eb/assignStudent.eb;
 
-echo "--teacherAssignment"; node loadEbData.js --teacherAssignment --pingOnly dataFiles/eb/teacherAssignment.eb;
+echo "--assignTeacher"; node loadEbData.js --assignTeacher --pingOnly dataFiles/eb/assignTeacher.eb;
 
