@@ -1,0 +1,16 @@
+$type	LocalId	Parent.LocalId	Title	AbbrevTitle	Description	SeqNum	MarkScale.RefId
+Realm	uff-apirealm1		uff-API Realm 1	uff-API 1	uff-API One	1	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Standards	uff-read	uff-apirealm1	uff-Reading	uff-Read	uff-Learn to Read	1	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Activities	uff-read1	uff-read	uff-Read First Part	uff-Read 1	uff-Read One	1	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Activities	uff-read2	uff-read	uff-Read Second	uff-Read 2	uff-Read Two	2	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Standards	uff-math	uff-apirealm1	uff-Math	uff-Math	uff-see numbers	2	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Activities	uff-math1	uff-math	uff-Math First	uff-Math 1	uff-Math One	1	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Activities	uff-math2	uff-math	uff-Math Second	uff-Math 2	uff-Math Two	2	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Standards	uff-art	uff-apirealm1	uff-Art	uff-Art	uff-see colors	3	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Activities	uff-art1	uff-art	uff-Art First	uff-Art 1	uff-Art One	1	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Activities	uff-art2	uff-art	uff-Art Second	uff-Art 2	uff-Art Two	2	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Realm	uff-apirealm2		uff-API Realm 2	uff-API 2	uff-API Two	2	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Standards	uff-history	uff-apirealm2	uff-History	uff-Hist	uff-Learn History	1	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Activities	uff-civilWar	uff-history	uff-Civil War	uff-civil war	uff-Learn Civil War	1	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Standards	uff-subart	uff-art	uff-Sub-Art	uff-Sub-art	uff-see sub colors	1	54CF207D-C4BC-4D01-A763-C02F13DE92BC
+Activities	uff-subact1	uff-subart	uff-art subact 1	uff-Subact 1	uff-subact One	1	54CF207D-C4BC-4D01-A763-C02F13DE92BC
