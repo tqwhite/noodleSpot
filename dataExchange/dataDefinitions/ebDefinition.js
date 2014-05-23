@@ -25,7 +25,7 @@ var editFinalObjectives=function(inObjList){
 	}
 	return outList;
 }
-var objectiveAssembler=require('../assemblers/nestedJson.js');
+var objectiveAssembler=require('assemblers/nestedJson');
 	objectiveAssembler=new objectiveAssembler({
 						"linkPropertyContainerName":"Parent",
 						"attachmentListPropertySpec":"$type",

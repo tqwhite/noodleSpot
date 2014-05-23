@@ -82,9 +82,9 @@ program.version('tqTest')
 	.parse(process.argv);
 
 
-var ebAccess = require('./expressbookAccess.js');
+var ebAccess = require('targetServerAccess');
 ebAccess = new ebAccess();
-var converter = require('./textToJson.js'),
+var converter = require('textToJson'),
 	fileName = process.argv[process.argv.length - 1], //"coreOrig.txt"
 	fileType = fileName.match(/\.(\w*)$/)[1],
 	finishedOutputObject,
@@ -98,9 +98,11 @@ switch (fileType) {
 		var dictionaryName = 'uffDefinition'
 		break;
 }
-var dictionary = require('./templates/dictionary.js');
+var dictionary = require('dictionary');
+
+
 dictionary = new dictionary({
-	dictionaryName: dictionaryName,
+	dataDefinition: require("./dataDefinitions/"+dictionaryName+".js"),
 	target: 'expressbook',
 	skipFirstLine: program.skipFirstLine
 });
