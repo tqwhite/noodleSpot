@@ -11,3 +11,5 @@ public/media/hash/*
 
 /tmp/*
 *.log
+
+processCommonCore/dataFiles/uffSampleData
