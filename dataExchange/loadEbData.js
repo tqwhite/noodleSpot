@@ -102,7 +102,7 @@ var dictionary = require('dictionary');
 
 
 dictionary = new dictionary({
-	dataDefinition: require("./dataDefinitions/"+dictionaryName+".js"),
+	dataDefinition: require("./dataDefinitions/" + dictionaryName + ".js"),
 	target: 'expressbook',
 	skipFirstLine: program.skipFirstLine
 });
@@ -314,17 +314,18 @@ var loginFoundCallback = function(error, response, body) {
 	}
 }
 
-var config=require('./config/targetServer.js'); 
-config=new config();
-var loginInfo=config.loginInfo();
+var config = require('./config/targetServer.js');
+config = new config();
+var loginInfo = config.loginInfo();
 ebAccess.start(
-	qtools.extend(
-		loginInfo, 
-		{
-			loginCallback: loginFoundCallback,
-			dryRun: ( !program.forReal && !program.pingOnly),
-			dumpJson: program.dumpJson
-		}
-	)
+qtools.extend(
+loginInfo,
+{
+	loginCallback: loginFoundCallback,
+	dryRun: ( !program.forReal && !program.pingOnly),
+	dumpJson: program.dumpJson
+}
+)
 );
+
 
