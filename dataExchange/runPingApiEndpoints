@@ -22,3 +22,19 @@ echo "--assignStudent"; node loadEbData.js --assignStudent --pingOnly dataFiles/
 
 echo "--assignTeacher"; node loadEbData.js --assignTeacher --pingOnly dataFiles/eb/assignTeacher.eb;
 
+echo "school"; node loadEbData.js --school --pingOnly  dataFiles/eb/schoolSetup/school.eb
+echo "gradeLevel"; node loadEbData.js --gradeLevel --pingOnly  dataFiles/eb/schoolSetup/gradeLevel.eb
+echo "gradeLevelSchool"; node loadEbData.js --gradeLevelSchool --pingOnly  dataFiles/eb/schoolSetup/gradeLevelSchool.eb
+echo "term"; node loadEbData.js --term --pingOnly  -- dataFiles/eb/schoolSetup/term.eb
+echo "termSchool"; node loadEbData.js --termSchool --pingOnly  -- dataFiles/eb/schoolSetup/termSchool.eb
+echo "schoolSetCurrentTerm"; node loadEbData.js --schoolSetCurrentTerm --pingOnly  -- dataFiles/eb/schoolSetup/school.eb
+
+
+echo "objective"; node loadEbData.js --objective --pingOnly dataFiles/uff/objectiveSetup/objectives.eb
+echo "assignGradeLevel"; node loadEbData.js --assignGradeLevel --pingOnly dataFiles/uff/objectiveSetup/gradeLevelAssignments.eb
+echo "assignTerm"; node loadEbData.js --assignTerm --pingOnly dataFiles/uff/objectiveSetup/termAssignments.eb
+echo "assignSpecialty"; node loadEbData.js --assignSpecialty --pingOnly dataFiles/uff/objectiveSetup/specialtyAssignments.eb
+
+
+echo "specialty"; node loadEbData.js --specialty --pingOnly dataFiles/eb/attributeSetup/specialties.eb
+echo "markScale"; node loadEbData.js --markScale --pingOnly dataFiles/eb/objectiveSetup/markScales.eb

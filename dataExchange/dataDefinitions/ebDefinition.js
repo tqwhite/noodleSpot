@@ -44,6 +44,39 @@ module.exports = {
 	//return '<!omitProperty!>'; will remove the property entirely
 
 
+	"markScale": //create UserInfo, standalone
+	{
+		"schemaName": "markScale",
+		"getFieldNamesFrom": 'firstLineOfFile',
+		"fieldList": [],
+		"maps": {
+			"expressbook": {}
+		},
+		"translation": {
+			"expressbook": {}
+		},
+		"assembler": {
+			"expressbook": ''
+		}
+	},
+
+	"specialty": //create UserInfo, standalone
+	{
+		"schemaName": "specialty",
+		"getFieldNamesFrom": 'firstLineOfFile',
+		"fieldList": [],
+		"maps": {
+			"expressbook": {}
+		},
+		"translation": {
+			"expressbook": {}
+		},
+		"assembler": {
+			"expressbook": ''
+		}
+	},
+
+
 	"assignSpecialty": //create UserInfo, standalone
 	{
 		"schemaName": "assignSpecialty",

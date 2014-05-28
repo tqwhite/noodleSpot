@@ -2,7 +2,20 @@
 var qtools = require('qtools');
 qtools = new qtools(module);
 
+
+var config = require('./config/targetServer.js');
+config = new config();
+var displayConfig = qtools.clone(config.loginInfo());
+displayConfig.password = '****';
+
 /*
+
+node loadEbData.js --markScale --verbose dataFiles/eb/objectiveSetup/markScales.eb
+node loadEbData.js --markScale --verbose --forReal dataFiles/eb/objectiveSetup/markScales.eb
+
+node loadEbData.js --specialty --verbose dataFiles/eb/attributeSetup/specialties.eb
+node loadEbData.js --specialty --verbose --forReal dataFiles/eb/attributeSetup/specialties.eb
+
 node loadEbData.js --objective --verbose --forReal dataFiles/uff/objectiveSetup/objectives.eb
 node loadEbData.js --assignGradeLevel --verbose --forReal dataFiles/uff/objectiveSetup/gradeLevelAssignments.eb
 node loadEbData.js --assignTerm --verbose --forReal dataFiles/uff/objectiveSetup/termAssignments.eb
@@ -53,6 +66,8 @@ node loadEbData.js --assignTeacher --skipFirstLine --forReal  --verbose dataFile
 
 var program = require('commander');
 program.version('tqTest')
+	.option('-y, --markScale', 'upload markScale')
+	.option('-y, --specialty', 'upload specialties')
 	.option('-y, --objective', 'upload objectives')
 	.option('-y, --assignGradeLevel', 'upload assignGradeLevel')
 	.option('-y, --assignTerm', 'upload assignGradeLevel')
@@ -239,15 +254,35 @@ if (program.school) {
 		definitionName: 'assignSpecialty',
 		fileName: fileName
 	};
+} else if (program.specialty) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/Attribute/Specialtyy',
+		endPointWrapperName: 'Specialties',
+		definitionName: 'specialty',
+		fileName: fileName
+	};
+} else if (program.markScale) {
+	var controlObj = {
+		accessModelMethodName: 'saveCompletedObject',
+		apiEndpoint: '/data/API/1/Objective/MarkScale',
+		endPointWrapperName: 'MarkScales',
+		definitionName: 'markScale',
+		fileName: fileName
+	};
 } else {
 	console.log('\n\n=== you need to choose something to upload ===');
 	program.outputHelp();
 	process.exit(1);
 }
+
 if (!program.quiet) {
 	console.log("executing " + controlObj.definitionName);
 }
 if (program.verbose) {
+
+	controlObj.config = displayConfig;
+
 	qtools.dump({
 		'\n\n===== controlObj =====\n': controlObj
 	});
@@ -314,8 +349,6 @@ var loginFoundCallback = function(error, response, body) {
 	}
 }
 
-var config = require('./config/targetServer.js');
-config = new config();
 var loginInfo = config.loginInfo();
 ebAccess.start(
 qtools.extend(
@@ -327,5 +360,6 @@ loginInfo,
 }
 )
 );
+
 
 
