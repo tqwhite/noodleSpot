@@ -21,8 +21,52 @@ node loadEbData.js --assignGradeLevel --verbose --forReal dataFiles/uff/objectiv
 node loadEbData.js --assignTerm --verbose --forReal dataFiles/uff/objectiveSetup/termAssignments.eb
 node loadEbData.js --assignSpecialty --verbose --forReal dataFiles/uff/objectiveSetup/specialtyAssignments.eb
 
+					List<JObject> inList;
+					List<MarkScale> outList=new List<MarkScale>();
+
+//					MarkScale student= Orm.Get<MarkScale>(data["RefId"]);
+//					MarkScale studentObj =  Utils.Deserialize<MarkScale>(data.ToString());
+
+					inList = Utils.Deserialize<List<JObject>>(data["MarkScale"].ToString());
+						Orm.beginTransaction();
+						foreach (JObject o in inList)
+						{
+
+							MarkScale target = this.GetByLocalId(o["LocalId"].ToString());
+
+
+
+								if (target == null)
+								{
+									target = new MarkScale();
+
+									if (Utils.JTokenNotNull(o, "RefId"))
+									{
+										target.RefId = Orm.MakeRefId(o["RefId"]);
+									}
+
+
+									target.Version = 1;
+									Orm.Attach(target);
+								}
+
+								//need to add Edit permission to MarkScale or something
+								//if (!Role.CheckAllPermissions(UserInfo.CurrentUser(), target, "MarkScale", Models.Abilities.Permissions.Edit))
+								//    throw new PermissionException(MessageCode.AccessDenied);
+
+
+								target.Merge(o);
+								outList.Add(target);
+}
+					Orm.commitTransaction();
+
+					this.ViewData["StatusCode"] = 1;
+					this.ViewData["Data"] = outList;
+					return this.View("Json");
 
 EB SEQUENCE
+node loadEbData.js --assignTeacher --verbose dataFiles/eb/peopleSetup/assignTeacher.eb
+
 node loadEbData.js --school --forReal  --verbose dataFiles/eb/schoolSetup/school.eb
 node loadEbData.js --gradeLevel --forReal  --verbose dataFiles/eb/schoolSetup/gradeLevel.eb
 node loadEbData.js --gradeLevelSchool --forReal  --verbose dataFiles/eb/schoolSetup/gradeLevelSchool.eb

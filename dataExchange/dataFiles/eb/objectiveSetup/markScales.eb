@@ -1,13 +1,10 @@
-init					
+root
 LocalId	Title	Type			
 test1	Test One	3			
-test2	TestTwo	3			
-					
-					
-					
-					
-value					
-LocalId	GradeLevel.RefId	Value	Points	Color	SequenceNum
+test2	TestTwo	3
+
+ScaleVals
+root.LocalId	GradeLevel.LocalID	Value	Points	Color	SequenceNum
 test1	ebOne	good	10	#aaffaa	1
 test1	ebOne	bad	5	#ffaaaa	2
 test1	ebTwo	good	5	#aaffaa	3
@@ -17,3 +14,4 @@ test2	ebOne	lame	5	#ffaaaa	6
 test2	ebTwo	super duper	10	#aaffaa	7
 test2	ebTwo	meh	5	#ffffaa	8
 test2	ebTwo	ultra lame	0	#ffaaaa	9
+

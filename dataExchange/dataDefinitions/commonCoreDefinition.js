@@ -12,7 +12,7 @@ module.exports = {
 	"core": //create UserInfo, standalone
 	{
 		"schemaName": "UserBase",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": [],
 		"maps": {
 			"expressbook": {}

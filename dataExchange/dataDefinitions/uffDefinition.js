@@ -287,7 +287,7 @@ module.exports = {
 	"schoolSetCurrentTerm": //sets currentTerm field in school, no UFF analog
 	{
 		"schemaName": "SchoolInfo",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": schoolFieldList,
 		"maps": {
 			"expressbook": {
@@ -342,10 +342,10 @@ module.exports = {
 		},
 
 
-	"Demo": //note fieldList directive is "firstLineOfFile"
+	"Demo": //note fieldList directive is "simpleEntityWithFieldHeader"
 		{
 			"fieldList":
-				"firstLineOfFile",
+				"simpleEntityWithFieldHeader",
 			"maps":{
 					"expressbook":{
 						}

@@ -27,6 +27,7 @@ var editFinalObjectives = function(inObjList) {
 	}
 	return outList;
 }
+
 var objectiveAssembler = require('assemblers/nestedJson');
 objectiveAssembler = new objectiveAssembler({
 	"linkPropertyContainerName": "Parent",
@@ -34,7 +35,17 @@ objectiveAssembler = new objectiveAssembler({
 	"destPropertyObjectPropertyName": "",
 	"finalObjectCustomEditor": editFinalObjectives
 });
-var inx = 1000;
+
+var flattenedObjectAssembler = require('assemblers/flattenedJson');
+flattenedObjectAssembler = new flattenedObjectAssembler({
+	"linkPropertyContainerName": "Parent",
+	"attachmentListPropertySpec": "$type",
+	"destPropertyObjectPropertyName": "",
+	"finalObjectCustomEditor": ''
+});
+
+var inx = 1000; //provide external (closure) value to allow up-counting indexes (of course, not necessarily sequential)
+
 module.exports = {
 
 	//NOTE: maps property are "sourceFileFieldName":"targetJsonPropertyName". Empty map, {}, emits entire fieldlist.
@@ -47,7 +58,7 @@ module.exports = {
 	"markScale": //create UserInfo, standalone
 	{
 		"schemaName": "markScale",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'flattenedJson',
 		"fieldList": [],
 		"maps": {
 			"expressbook": {}
@@ -56,14 +67,14 @@ module.exports = {
 			"expressbook": {}
 		},
 		"assembler": {
-			"expressbook": ''
+			"expressbook": flattenedObjectAssembler
 		}
 	},
 
 	"specialty": //create UserInfo, standalone
 	{
 		"schemaName": "specialty",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": [],
 		"maps": {
 			"expressbook": {}
@@ -80,7 +91,7 @@ module.exports = {
 	"assignSpecialty": //create UserInfo, standalone
 	{
 		"schemaName": "assignSpecialty",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": [],
 		"maps": {
 			"expressbook": {}
@@ -97,7 +108,7 @@ module.exports = {
 	"assignTerm": //create UserInfo, standalone
 	{
 		"schemaName": "assignTerm",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": [],
 		"maps": {
 			"expressbook": {}
@@ -114,7 +125,7 @@ module.exports = {
 	"assignGradeLevel": //create UserInfo, standalone
 	{
 		"schemaName": "assignGradeLevel",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": [],
 		"maps": {
 			"expressbook": {}
@@ -131,7 +142,7 @@ module.exports = {
 	"objective": //create UserInfo, standalone
 	{
 		"schemaName": "UserBase",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": [],
 		"maps": {
 			"expressbook": {}
@@ -170,7 +181,7 @@ module.exports = {
 	"teacher": //create UserInfo, standalone
 	{
 		"schemaName": "UserBase",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": teacherFieldList,
 		"maps": {},
 		"translation": {
@@ -196,7 +207,7 @@ module.exports = {
 	"homeroom": //"Section": //rosmat/init
 	{
 		"schemaName": "Rosmat",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList":
 		["RefId", "Version", "Title", "AbbrevTitle",
 			"Expiration", "MarkingRule", "ImportCode", "RosmatType",
@@ -211,7 +222,7 @@ module.exports = {
 	"assignStudent": //"SectionStudent": //rosmat/attachStudents
 	{
 		"schemaName": "assignStudent",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList":
 		["Rosmat.RefId", "LocalId", "RefId"],
 		"maps": {
@@ -222,7 +233,7 @@ module.exports = {
 	"assignTeacher": //"SectionStaff": //rosmat/addTeachers
 	{
 		"schemaName": "assignTeacher",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList":
 		["Rosmat.RefId", "LocalId", "RefId"],
 		"maps": {
@@ -235,7 +246,7 @@ module.exports = {
 	"student": //define student record, attaches personal gradelevel
 	{
 		"schemaName": "StudentPersonal",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": studentFieldList,
 		"maps": {
 			"expressbook": {}
@@ -247,7 +258,7 @@ module.exports = {
 	"term": //defines term, standalone
 	{
 		"schemaName": "grades",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": termFieldList,
 		"maps": {
 			"expressbook": {
@@ -274,7 +285,7 @@ module.exports = {
 	"termSchool": //attaches terms to schools
 	{
 		"schemaName": "grades",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": termFieldList,
 		"maps": {
 			"expressbook": {
@@ -298,7 +309,7 @@ module.exports = {
 	"gradeLevel": //defines gradeLevel, standalone
 	{
 		"schemaName": "GradeLevel",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": gradeLevelFieldList,
 		"maps": {
 			"LocalId": "LocalId",
@@ -326,7 +337,7 @@ module.exports = {
 	"gradeLevelSchool": //attaches gradeLevels to schools
 	{
 		"schemaName": "GradeLevel",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": gradeLevelFieldList,
 		"maps": {
 			"expressbook": {
@@ -342,7 +353,7 @@ module.exports = {
 	"school": //defines school, standalone
 	{
 		"schemaName": "SchoolInfo",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": schoolFieldList,
 		"maps": {
 			"expressbook": {
@@ -361,7 +372,7 @@ module.exports = {
 	"schoolSetCurrentTerm": //sets the current term for each school
 	{
 		"schemaName": "SchoolInfo",
-		"getFieldNamesFrom": 'firstLineOfFile',
+		"fileDataFormat": 'simpleEntityWithFieldHeader',
 		"fieldList": schoolFieldList,
 		"maps": {
 			"expressbook": {
