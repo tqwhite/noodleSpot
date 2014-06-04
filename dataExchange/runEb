@@ -11,7 +11,6 @@ node loadEbData.js --gradeLevel --forReal dataFiles/eb/schoolSetup/gradeLevel.eb
 			echo "found error";
 			exit 1;
 		fi
-
 node loadEbData.js --school --forReal -- dataFiles/eb/schoolSetup/school.eb
 		if [ $? -eq 1 ]
 		then
@@ -44,6 +43,13 @@ node loadEbData.js --student --forReal -- dataFiles/eb/peopleSetup/student.eb
 			exit 1;
 		fi
 node loadEbData.js --teacher --forReal -- dataFiles/eb/peopleSetup/teacher.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
+
+node loadEbData.js --markScale --forReal dataFiles/eb/objectiveSetup/markScales.eb
 		if [ $? -eq 1 ]
 		then
 			echo "found error";

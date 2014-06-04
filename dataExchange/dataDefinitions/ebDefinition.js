@@ -64,7 +64,26 @@ module.exports = {
 			"expressbook": {}
 		},
 		"translation": {
-			"expressbook": {}
+			"expressbook": {
+			"root":{
+				"Type":function(itemObj, sourceItem) {
+					if (!sourceItem.Type) {
+						return;
+					} else {
+						return +sourceItem.Type; //unary + type casts to number
+					}
+				},
+			},
+			"ScaleVals":{
+				"SequenceNum":function(itemObj, sourceItem) {
+					if (!sourceItem.SequenceNum) {
+						return;
+					} else {
+						return +sourceItem.SequenceNum; //unary + type casts to number
+					}
+				},
+			}
+		}
 		},
 		"assembler": {
 			"expressbook": flattenedObjectAssembler
