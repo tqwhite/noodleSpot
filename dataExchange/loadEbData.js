@@ -193,7 +193,7 @@ if (program.school) {
 	var controlObj = {
 		accessModelMethodName: 'saveCompletedObject',
 		apiEndpoint: '/data/API/1/Gradebook/Homeroom',
-		endPointWrapperName: 'Homerooms',
+		endPointWrapperName: 'Classes',
 		definitionName: 'homeroom',
 		fileName: fileName
 	};

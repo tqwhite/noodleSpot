@@ -1,0 +1,3 @@
+LocalId	Title	AbbrevTitle	Expiration	MarkingRule	ImportCode	RosmatType	JsonStorage	SchoolInfo.LocalId	Specialty.LocalId
+ebSpecial1G1	HR:ebSpecial1:ebOne:ebSpecial1G1	HR:ebSpecial1G1		1		AdHawk	{}	ebGamma	cooking
+ebSpecial1G2	HR:ebSpecial1:ebTwo:ebSpecial1G2	HR:ebSpecial1G2		1		AdHawk	{}	ebGamma	shop

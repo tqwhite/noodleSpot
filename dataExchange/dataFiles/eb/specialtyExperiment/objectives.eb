@@ -1,0 +1,6 @@
+$type	LocalId	Parent.LocalId	Title	AbbrevTitle	Description	SeqNum	MarkScale.LocalId
+Realm	realmSpecial1		API Realm Special1	API 1	API Sp One	1	test1
+Standards	cooking	realmSpecial1	Cooking	Cook	Learn to Cook	1	test1
+Activities	eggs	cooking	Cook Eggs	Eggs	Learn Eggs	1	test1
+Standards	shop	realmSpecial1	Shop	Shop	Learn Shop	1	test1
+Activities	wood	shop	Cut Wood	Wood	Learn Wood	1	test1
