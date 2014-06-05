@@ -5,6 +5,12 @@ node loadEbData.js --term --forReal -- dataFiles/eb/schoolSetup/term.eb
 			echo "found error";
 			exit 1;
 		fi
+node loadEbData.js --specialty --forReal dataFiles/eb/attributeSetup/specialties.eb
+		if [ $? -eq 1 ]
+		then
+			echo "found error";
+			exit 1;
+		fi
 node loadEbData.js --gradeLevel --forReal dataFiles/eb/schoolSetup/gradeLevel.eb
 		if [ $? -eq 1 ]
 		then

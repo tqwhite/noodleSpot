@@ -267,7 +267,7 @@ if (program.school) {
 } else if (program.markScale) {
 	var controlObj = {
 		accessModelMethodName: 'saveCompletedObject',
-		apiEndpoint: '/data/API/1/Objective/MarkScale',
+		apiEndpoint: '/data/API/1/Attribute/MarkScale',
 		endPointWrapperName: 'MarkScales',
 		definitionName: 'markScale',
 		fileName: fileName
