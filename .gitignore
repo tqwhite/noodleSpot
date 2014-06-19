@@ -12,5 +12,5 @@ public/media/hash/*
 /tmp/*
 *.log
 
-dataExchange/dataFiles/uffSampleData
-dataExchange/config/targetServer.js
+lighteningPipe/dataFiles/uffSampleData
+lighteningPipe/config/targetServer.js
