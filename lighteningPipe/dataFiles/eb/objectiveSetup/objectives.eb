@@ -1,0 +1,4 @@
+$type	LocalId	Parent.LocalId	Title	AbbrevTitle	Description	SeqNum	MarkScale.LocalId
+Realm	apirealm12		API Realm 1	API 1	API One	1	test1
+Standards	read2	apirealm12	Reading	Read	Read Two	2	test1
+Standards	math2	apirealm12	Math	Math	see numbers	2	test1

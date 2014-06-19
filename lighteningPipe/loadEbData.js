@@ -193,7 +193,7 @@ if (program.school) {
 	var controlObj = {
 		accessModelMethodName: 'saveCompletedObject',
 		apiEndpoint: '/data/API/1/Gradebook/Homeroom',
-		endPointWrapperName: 'Classes',
+		endPointWrapperName: 'Homerooms',
 		definitionName: 'homeroom',
 		fileName: fileName
 	};
@@ -267,7 +267,7 @@ if (program.school) {
 } else if (program.markScale) {
 	var controlObj = {
 		accessModelMethodName: 'saveCompletedObject',
-		apiEndpoint: '/data/API/1/Attribute/MarkScale',
+		apiEndpoint: '/data/API/1/Objective/MarkScale',
 		endPointWrapperName: 'MarkScales',
 		definitionName: 'markScale',
 		fileName: fileName
